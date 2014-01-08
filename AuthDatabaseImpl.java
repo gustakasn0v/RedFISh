@@ -3,7 +3,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Dictionary;
+import java.util.Hashtable;
 
 /** This is the actual implementation of Rem that
  *  the RMI server uses. The server builds an instance
@@ -13,17 +13,17 @@ import java.util.Dictionary;
  */
 
 public class AuthDatabaseImpl extends UnicastRemoteObject implements AuthDatabase {
-  private Dictionary<String,String> credentialDB;
+  private Hashtable<String,String> credentialDB;
 
   public AuthDatabaseImpl() throws RemoteException {
-    this.credentialDB = new Dictionary<String,String>();
+    this.credentialDB = new Hashtable<String,String>();
   }
 
 
-  public Boolean addUser(String username, String password){
-    if ( this.credentialDB.get(username) != null) return false;
+  public Boolean addUser(User user){
+    if ( this.credentialDB.get(user.username) != null) return false;
     else{
-      this.credentialDB.put(username,password);
+      this.credentialDB.put(user.username,user.password);
       return true;
     }
   }
@@ -33,6 +33,4 @@ public class AuthDatabaseImpl extends UnicastRemoteObject implements AuthDatabas
     return (pass != null && pass == password);
   }
   
-
-  }
 }

@@ -7,7 +7,7 @@ import java.rmi.*;
  */
 
 public interface AuthDatabase extends Remote {
-	public Boolean addUser(String username, String password);
+	public Boolean addUser(User user);
 
 	public Boolean authenticate(String username, String password);
 }
