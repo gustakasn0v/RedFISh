@@ -15,24 +15,25 @@ import org.apache.commons.cli.ParseException;
  * @see Rem
  */
 
-public class a_rmifs {
+public class s_rmifs {
   public static void main(String[] args) {
-  	int port = 20226;
+  	int port = 30226;
 
   	try {
 	    Options cliOptions = new Options();
 	    String filename = "";
 
 	    cliOptions.addOption("help", false, "Print help for this application");
-	    cliOptions.addOption("f", true, "The user database file");
-	    cliOptions.addOption("p", true, "The port to use. The default port is 20226");
+	    cliOptions.addOption("h", false, "The host of the Authentication server");
+	    cliOptions.addOption("r", true, "The port of the Authentication server");
+	    cliOptions.addOption("l", true, "The port to use. The default port is 30226");
 
 	    BasicParser cliParser = new BasicParser();
 	    CommandLine cl = cliParser.parse(cliOptions, args);
 
 	    if ( cl.hasOption('h') ) {
 	        HelpFormatter helper = new HelpFormatter();
-	        helper.printHelp("s_rmifs -f dbfile -p port", cliOptions);
+	        helper.printHelp("s_rmifs -l port -h authhost -r authport", cliOptions);
 	    }
 	    else {
 	    	if ( !cl.hasOption('f') ) {
@@ -50,8 +51,7 @@ public class a_rmifs {
 	    }
 
 	    AuthDatabaseImpl authDatabase = new AuthDatabaseImpl();
-	    AuthFileParser fileParser = new AuthFileParser(filename);
-	    LinkedList<User> userList = fileParser.parse(filename);
+	    LinkedList<User> userList = FileParser.AuthFileParser.parse(filename);
 	    for(User user : userList) authDatabase.addUser(user);
 	    
 

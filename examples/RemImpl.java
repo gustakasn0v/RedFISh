@@ -14,12 +14,12 @@ import java.io.InputStreamReader;
 public class RemImpl extends UnicastRemoteObject implements Rem {
   public RemImpl() throws RemoteException {}
 
-  public String getMessage() throws RemoteException {
+  public String getMessage(String blah) throws RemoteException,NullPointerException {
     System.out.println("Enter something here : ");
     try{
     	BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
     	String s = bufferRead.readLine();
-    	return(s);
+      throw new NullPointerException();
     }
     catch(IOException e){
 	e.printStackTrace();

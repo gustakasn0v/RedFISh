@@ -25,7 +25,10 @@ public class RemClient {
       Rem remObject =
         (Rem)registry.lookup("Rem");
       // Call methods in remObject:
-      System.out.println(remObject.getMessage());
+      System.out.println(remObject.getMessage("holaa"));
+    }
+    catch(NullPointerException e){
+      System.out.println("WEBOOOOO");
     }
     catch(RemoteException re) {
       System.out.println("RemoteException: " + re);
