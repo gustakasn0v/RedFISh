@@ -1,4 +1,5 @@
 import java.rmi.*;
+import java.util.LinkedList;
 
 /** The RMI client will use this interface directly.
  *  The RMI server will make a real remote object that
@@ -9,5 +10,5 @@ import java.rmi.*;
 public interface AuthDatabase extends Remote {
 	public Boolean addUser(User user);
 
-	public Boolean authenticate(String username, String password);
+	public LinkedList<User> authenticate(LinkedList<User> credentials);
 }

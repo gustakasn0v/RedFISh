@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
+import java.util.LinkedList;
 
 /** This is the actual implementation of Rem that
  *  the RMI server uses. The server builds an instance
@@ -28,9 +29,13 @@ public class AuthDatabaseImpl extends UnicastRemoteObject implements AuthDatabas
     }
   }
 
-  public Boolean authenticate(String username, String password){
-    String pass = this.credentialDB.get(username);
-    return (pass != null && pass == password);
+  public LinkedList<User> authenticate(LinkedList<User> credentials){
+    LinkedList<User> authenticated = new LinkedList<User>();
+    for(User user : credentials){
+      if (this.credentialDB.get(user.username) == user.password) 
+        authenticated.add(user);
+    }
+    return authenticated;
   }
   
 }
