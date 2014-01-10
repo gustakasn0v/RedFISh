@@ -30,7 +30,7 @@ public class a_rmifs {
 	    BasicParser cliParser = new BasicParser();
 	    CommandLine cl = cliParser.parse(cliOptions, args);
 
-	    if ( cl.hasOption('h') ) {
+	    if ( cl.hasOption("help") ) {
 	        HelpFormatter helper = new HelpFormatter();
 	        helper.printHelp("s_rmifs -f dbfile -p port", cliOptions);
 	    }
@@ -52,7 +52,9 @@ public class a_rmifs {
 	    AuthDatabaseImpl authDatabase = new AuthDatabaseImpl();
 	    AuthFileParser fileParser = new AuthFileParser(filename);
 	    LinkedList<User> userList = fileParser.parse(filename);
-	    for(User user : userList) authDatabase.addUser(user);
+	    for(User user : userList) {
+	    	authDatabase.addUser(user);
+	    }
 	    
 
 	    Registry registry = LocateRegistry.createRegistry( port );

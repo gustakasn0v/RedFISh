@@ -21,7 +21,7 @@ public class AuthDatabaseImpl extends UnicastRemoteObject implements AuthDatabas
   }
 
 
-  public Boolean addUser(User user){
+  public Boolean addUser(User user) throws RemoteException{
     if ( this.credentialDB.get(user.username) != null) return false;
     else{
       this.credentialDB.put(user.username,user.password);
@@ -29,10 +29,13 @@ public class AuthDatabaseImpl extends UnicastRemoteObject implements AuthDatabas
     }
   }
 
-  public LinkedList<User> authenticate(LinkedList<User> credentials){
+  public LinkedList<User> authenticate(LinkedList<User> credentials) throws RemoteException{
     LinkedList<User> authenticated = new LinkedList<User>();
+    System.out.println(""+credentials.size());
     for(User user : credentials){
-      if (this.credentialDB.get(user.username) == user.password) 
+      System.out.println("WEBBOOOO");
+      System.out.println(user.username);
+      if (this.credentialDB.get(user.username).equals(user.password)) 
         authenticated.add(user);
     }
     return authenticated;

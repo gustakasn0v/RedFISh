@@ -1,17 +1,27 @@
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.rmi.registry.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.File;
 
 public class FileServerImpl extends UnicastRemoteObject implements FileServer{
-	private LinkedList<RMIFile> serverFiles;
+	private Hashtable<String,RMIFile> serverFiles;
 
 	private AuthDatabase authServer;
+
+	private static Integer BUF_SIZE = 2048;
 
 	public FileServerImpl(String authHost, int authPort) throws RemoteException{
 		try{
 			// No tengo idea que agregar a la lista de archivos del servidor
-			this.serverFiles = new LinkedList<RMIFile>();
+			this.serverFiles = new Hashtable<String,RMIFile>();
 
 			//Creo la conexion al servidor de autenticacion
 			Registry registry = LocateRegistry.getRegistry(authHost,authPort);
@@ -30,10 +40,32 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 		
 	}
 
-	public LinkedList<RMIFile> listFiles(){return null;}
+	private void authenticate(User user) throws NotAuthenticatedException,RemoteException{
+		LinkedList<User> credentials = new LinkedList<User>();
+		credentials.add(user);
+		if (this.authServer.authenticate(credentials).size() == 0)
+			throw new NotAuthenticatedException();
+	}
 
-	public Boolean uploadFile(RMIFile source, RMIFile destination, LinkedList<User> credentials){return true;}
-	public Boolean downloadFile(RMIFile source, RMIFile destination){return true;}
+	public InputStream getInputStream(File f,User user) throws IOException,RemoteException,NotAuthenticatedException {
+		authenticate(user);
+    	return new RMIInputStream(new RMIInputStreamImpl(new 
+    		FileInputStream(f)));
+	}
 
-	public Boolean deleteFile(RMIFile source, LinkedList<User> credentials){return true;}
+	public OutputStream getOutputStream(File f,User owner) throws IOException,RemoteException,NotAuthenticatedException {
+		System.out.println("WEBON");
+		System.out.println(owner.username+" WEBON");
+		authenticate(owner);
+		serverFiles.put(f.getName(),new RMIFile(f.getName(),owner));
+	    return new RMIOutputStream(new RMIOutputStreamImpl(new FileOutputStream(f)));
+	}
+
+	public LinkedList<RMIFile> listFiles() throws RemoteException{return null;}
+
+	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException{
+		if (credentials.equals(this.serverFiles.get(src).owner)){
+			this.serverFiles.get(src).delete();
+		}
+	}
 }

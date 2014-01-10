@@ -8,7 +8,7 @@ import java.util.LinkedList;
  */
 
 public interface AuthDatabase extends Remote {
-	public Boolean addUser(User user);
+	public Boolean addUser(User user) throws RemoteException;
 
-	public LinkedList<User> authenticate(LinkedList<User> credentials);
+	public LinkedList<User> authenticate(LinkedList<User> credentials) throws RemoteException;
 }

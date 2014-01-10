@@ -18,56 +18,48 @@ import org.apache.commons.cli.ParseException;
 public class s_rmifs {
   public static void main(String[] args) {
   	int port = 30226;
+  	int authPort = 20226;
+  	String authHost = "localhost";
 
   	try {
 	    Options cliOptions = new Options();
 	    String filename = "";
 
 	    cliOptions.addOption("help", false, "Print help for this application");
-	    cliOptions.addOption("h", false, "The host of the Authentication server");
-	    cliOptions.addOption("r", true, "The port of the Authentication server");
-	    cliOptions.addOption("l", true, "The port to use. The default port is 30226");
+	    cliOptions.addOption("h", false, "The host of the Authentication server. Defaults to localhost");
+	    cliOptions.addOption("r", true, "The port of the Authentication server. Defaults to 20226");
+	    cliOptions.addOption("l", true, "The port to use. Defaults to 30226");
 
 	    BasicParser cliParser = new BasicParser();
 	    CommandLine cl = cliParser.parse(cliOptions, args);
 
-	    if ( cl.hasOption('h') ) {
+	    if ( cl.hasOption("help") ) {
 	        HelpFormatter helper = new HelpFormatter();
 	        helper.printHelp("s_rmifs -l port -h authhost -r authport", cliOptions);
 	    }
 	    else {
-	    	if ( !cl.hasOption('f') ) {
-	    		System.out.println("A database file must be specified with -f option");
-		        HelpFormatter helper = new HelpFormatter();
-		        helper.printHelp("RMIFS Authentication Server", cliOptions);
-		        System.exit(0);
+	    	if ( cl.hasOption('h') ) {
+	    		authHost = cl.getOptionValue("h");
 	    	}
-	    	else{
-	    		filename = cl.getOptionValue("f");
-	    		if ( cl.hasOption('p') ) {
-		    		port = Integer.parseInt(cl.getOptionValue("p"));
-	    		}
+	    	if ( cl.hasOption('r') ) {
+	    		authPort = Integer.parseInt(cl.getOptionValue("r"));
+	    	}
+	    	if ( cl.hasOption('l') ) {
+	    		port = Integer.parseInt(cl.getOptionValue("l"));
 	    	}
 	    }
 
-	    AuthDatabaseImpl authDatabase = new AuthDatabaseImpl();
-	    LinkedList<User> userList = FileParser.AuthFileParser.parse(filename);
-	    for(User user : userList) authDatabase.addUser(user);
+	    FileServerImpl fileServer = new FileServerImpl(authHost,authPort);
 	    
 
 	    Registry registry = LocateRegistry.createRegistry( port );
-	    registry.rebind("Auth", authDatabase);
+	    registry.rebind("FileServer", fileServer);
 	}
 
 	catch (ParseException e) {
 	    e.printStackTrace();
 	}
 	
-	catch(FileNotFoundException e){
-		System.out.println("Error reading file");
-		e.printStackTrace();
-	}
-
     catch(RemoteException re) {
     	System.out.println("RemoteException: " + re);
     }
