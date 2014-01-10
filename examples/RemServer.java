@@ -14,12 +14,20 @@ public class RemServer {
       Registry registry = LocateRegistry.createRegistry( 20226 );
       RemImpl localObject = new RemImpl();
       registry.rebind("Rem", localObject);
+      System.out.println("Ready");
+      Thread.sleep(7 * 1000);
+      localObject.test="CUCAA";
+      System.out.println("Changed");
     }
 //    catch(AlreadyBoundException abe) {
 //      System.out.println("AlreadyBoundException: " + abe);
 //    }
     catch(RemoteException re) {
       System.out.println("RemoteException: " + re);
+    }
+
+    catch(InterruptedException re) {
+      System.out.println("InterruptedException: " + re);
     }
 //    catch(MalformedURLException mfe) {
 //      System.out.println("MalformedURLException: "
