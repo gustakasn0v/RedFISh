@@ -35,8 +35,10 @@ public class AuthDatabaseImpl extends UnicastRemoteObject implements AuthDatabas
     for(User user : credentials){
       System.out.println("WEBBOOOO");
       System.out.println(user.username);
-      if (this.credentialDB.get(user.username).equals(user.password)) 
+      if (this.credentialDB.get(user.username).equals(user.password)){
         authenticated.add(user);
+      }
+      
     }
     return authenticated;
   }

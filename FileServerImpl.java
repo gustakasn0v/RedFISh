@@ -54,10 +54,10 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 	}
 
 	public OutputStream getOutputStream(File f,User owner) throws IOException,RemoteException,NotAuthenticatedException {
-		System.out.println("WEBON");
-		System.out.println(owner.username+" WEBON");
 		authenticate(owner);
-		serverFiles.put(f.getName(),new RMIFile(f.getName(),owner));
+		RMIFile newFile = new RMIFile(f.getName(),owner);
+		//System.out.println(newFile.getName());
+		serverFiles.put(f.getName(),newFile);
 	    return new RMIOutputStream(new RMIOutputStreamImpl(new FileOutputStream(f)));
 	}
 
@@ -65,7 +65,9 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 
 	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException{
 		if (credentials.equals(this.serverFiles.get(src).owner)){
-			this.serverFiles.get(src).delete();
+			File toDelete = new File(src);
+			toDelete.delete();
 		}
+		else throw new NotAuthorizedException();	
 	}
 }

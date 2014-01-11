@@ -8,4 +8,13 @@ public class User implements Serializable{
 		this.username = user;
 		this.password = pass;
 	}
+
+	public boolean equals(Object u){
+		System.out.println(u instanceof User);
+		if (!(u instanceof User)) return false;
+		else {
+			User u2 = (User) u;
+			return (u2.username.equals(this.username) && u2.password.equals(this.password));
+		}
+	}
 }

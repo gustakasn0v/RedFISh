@@ -21,7 +21,7 @@ public class AuthFileParser implements FileParser{
 				while ((line = fileHandler.readLine()) != null){
 					line = line.trim();
 					user = line.substring(0,line.indexOf(':')).trim();
-					pass = line.substring(line.indexOf(':'),line.length()).trim();
+					pass = line.substring(line.indexOf(':')+1,line.length()).trim();
 					userList.add(new User(user,pass));
 				}
 			}

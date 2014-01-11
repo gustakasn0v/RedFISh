@@ -74,7 +74,7 @@ public class Test{
 	        t = System.currentTimeMillis();
 	        
 	        uploadFile(server,"prueba.txt", "download.tif",new User("dreabalbas","123"));
-	        //server.deleteFile("prueba.txt",new User("dreabalbas","1234"));
+	        server.deleteFile("prueba.txt",new User("dreabalbas","123"));
 
 	        //t = (System.currentTimeMillis() - t) / 1000;
 	        //System.out.println("download: " + (len / t / 1000000d) + " MB/s");
@@ -97,10 +97,10 @@ public class Test{
 			System.out.println("Not authenticated");
 			System.exit(0);
 		}
-		// catch(NotAuthorizedException nae){
-		// 	System.out.println("Not authorized");
-		// 	System.exit(0);
-		// }
+		catch(NotAuthorizedException nae){
+			System.out.println("Not authorized");
+			System.exit(0);
+		}
 		
 	}
 }
