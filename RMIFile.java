@@ -13,4 +13,9 @@ public class RMIFile extends File{
 	public RMIFile(String filename){
 		super(filename);
 	}
+
+	public String toString(){
+		System.out.println(this.getName());
+		return "Nombre: "+this.getName() + " | " + this.owner.toString();
+	}
 }

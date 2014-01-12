@@ -11,14 +11,24 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.File;
 
+import org.apache.commons.collections4.queue.CircularFifoQueue;
+
 public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 	private Hashtable<String,RMIFile> serverFiles;
 
 	private AuthDatabase authServer;
 
+	private CircularFifoQueue<FileServerCommand> history;
+
 	private static Integer BUF_SIZE = 2048;
 
-	public FileServerImpl(String authHost, int authPort) throws RemoteException{
+	private static Integer HIST_SIZE = 20;
+
+	public String getHistory(){
+		return this.history.toString();
+	}
+
+	public FileServerImpl(String authHost, int authPort) throws RemoteException,NotBoundException{
 		try{
 			// No tengo idea que agregar a la lista de archivos del servidor
 			this.serverFiles = new Hashtable<String,RMIFile>();
@@ -26,17 +36,16 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 			//Creo la conexion al servidor de autenticacion
 			Registry registry = LocateRegistry.getRegistry(authHost,authPort);
 		    this.authServer = (AuthDatabase)registry.lookup("Auth");
-		}
 
+		    this.history = new CircularFifoQueue<FileServerCommand>(this.HIST_SIZE);
+		}
 		catch(RemoteException re){
-			System.out.println("Imposible contactar al servidor de autenticación");
-			re.printStackTrace();
+			throw new RemoteException("Imposible contactar registro de autenticación",re);
 		}
-
 		catch(NotBoundException nbe){
-			System.out.println("Imposible obtener objeto remoto de autenticación");
-			nbe.printStackTrace();
+			throw new RemoteException("Imposible obtener objeto de autenticación",nbe);
 		}
+		
 		
 	}
 
@@ -49,23 +58,45 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 
 	public InputStream getInputStream(File f,User user) throws IOException,RemoteException,NotAuthenticatedException {
 		authenticate(user);
+		this.history.add(
+			new FileServerCommand("baj",f.getName(),user)
+		);
     	return new RMIInputStream(new RMIInputStreamImpl(new 
     		FileInputStream(f)));
 	}
 
 	public OutputStream getOutputStream(File f,User owner) throws IOException,RemoteException,NotAuthenticatedException {
 		authenticate(owner);
-		RMIFile newFile = new RMIFile(f.getName(),owner);
-		//System.out.println(newFile.getName());
+		RMIFile newFile = new RMIFile(f.getName(),new User(owner.username,owner.password));
+		
 		serverFiles.put(f.getName(),newFile);
+
+		this.history.add(
+			new FileServerCommand("sub",f.getName(),owner)
+		);
+
 	    return new RMIOutputStream(new RMIOutputStreamImpl(new FileOutputStream(f)));
 	}
 
-	public LinkedList<RMIFile> listFiles() throws RemoteException{return null;}
+	public String listFiles(User user) throws RemoteException,NotAuthenticatedException{
+		authenticate(user);
+		this.history.add(
+			new FileServerCommand("rls","",user)
+		);
+		LinkedList<RMIFile> listOfFiles = new LinkedList<RMIFile>(this.serverFiles.values());
+		return listOfFiles.toString();
+	}
 
-	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException{
+	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException,FileNotFoundException{
 		if (credentials.equals(this.serverFiles.get(src).owner)){
 			File toDelete = new File(src);
+
+			if (!toDelete.exists()) throw new FileNotFoundException();
+
+			this.history.add(
+				new FileServerCommand("bor",src,credentials)
+			);
+
 			toDelete.delete();
 		}
 		else throw new NotAuthorizedException();	

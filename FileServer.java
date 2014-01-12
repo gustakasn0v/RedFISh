@@ -1,6 +1,7 @@
 import java.rmi.*;
 import java.util.LinkedList;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.File;
@@ -10,11 +11,13 @@ import java.io.File;
 
 public interface FileServer extends Remote{
 
-	public LinkedList<RMIFile> listFiles() throws RemoteException;
+	public String listFiles(User user) throws RemoteException,NotAuthenticatedException;
+
+	public Boolean testUser(User user) throws RemoteException;
 
 	public InputStream getInputStream(File f, User user) throws IOException,RemoteException,NotAuthenticatedException;
 
 	public OutputStream getOutputStream(File f,User owner) throws IOException,RemoteException,NotAuthenticatedException;
 
-	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException;	
+	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException,FileNotFoundException;	
 }

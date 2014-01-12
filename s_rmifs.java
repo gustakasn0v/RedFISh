@@ -33,9 +33,10 @@ public class s_rmifs {
 	    BasicParser cliParser = new BasicParser();
 	    CommandLine cl = cliParser.parse(cliOptions, args);
 
-	    if ( cl.hasOption("help") ) {
+	    if ( cl.hasOption("help") || !cl.hasOption('h') 
+	    	|| !cl.hasOption('r') || !cl.hasOption('l')) {
 	        HelpFormatter helper = new HelpFormatter();
-	        helper.printHelp("s_rmifs -l port -h authhost -r authport", cliOptions);
+	        helper.printHelp("java s_rmifs -l port -h authhost -r authport", cliOptions);
 	    }
 	    else {
 	    	if ( cl.hasOption('h') ) {
@@ -49,48 +50,76 @@ public class s_rmifs {
 	    	}
 	    }
 
-	    FileServerImpl fileServer = new FileServerImpl(authHost,authPort);
+	    FileServerImpl fileServer = null;
+	    try{
+	    	fileServer = new FileServerImpl(authHost,authPort);
+	    }
+	    catch (RemoteException re){
+	    	System.out.println(re);
+	    	re.printStackTrace();
+	    	System.exit(0);
+	    }
+	    catch (NotBoundException nbe){
+	    	System.out.println(nbe);
+	    	nbe.printStackTrace();
+	    	System.exit(0);
+	    }
+	    
 	    
 
 	    Registry registry = LocateRegistry.createRegistry( port );
+	    System.out.print("Iniciando el servidor:\t\t\t");
 	    registry.rebind("FileServer", fileServer);
+	    System.out.println("[   OK   ]");
+
+	    BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+	    String command, fullString;
+	    while(true){
+	    	fullString = bufferRead.readLine();
+	    	switch(fullString){
+	    		case "log":
+	    			System.out.println(fileServer.getHistory());
+	    			break;
+	    		case "sal":
+		    		registry.unbind("FileServer");
+		            fileServer.unexportObject(fileServer, true);
+		            System.out.print("Deteniendo el servidor:\t\t\t");
+		            System.out.println("[   OK   ]");
+		            System.exit(0);
+	    			break;
+	    		default:
+	    			System.out.println("Comando no reconocido");
+	    	}
+	    }
+	}
+	catch (IOException e) {
+		if (e instanceof RemoteException){
+			System.out.println("[ FAILED ]");
+			System.out.println("Error contactando registry");
+		}
+		else if (e instanceof MalformedURLException){
+			System.out.println("[ FAILED ]");
+			System.out.println("URL de servidor malformado");
+		}
+		else{
+			System.out.println("Error leyendo la entrada estandar");
+		}
+		e.printStackTrace();
+		System.exit(0);
+	}
+
+	catch (NotBoundException e) {
+		System.out.println("Error deteniendo el servidor");
+		System.out.println(e);
+	    e.printStackTrace();
+	    System.exit(0);
 	}
 
 	catch (ParseException e) {
+		System.out.println("Error leyendo opciones de consola");
+		System.out.println(e);
 	    e.printStackTrace();
+	    System.exit(0);
 	}
-	
-    catch(RemoteException re) {
-    	System.out.println("RemoteException: " + re);
-    }
-    while(true);
-
-//     try {
-//       String host =
-//         (args.length > 0) ? args[0] : "localhost";
-        
-//       String port =
-//         (args.length > 0) ? args[1] : "20226";
-        
-//       Registry registry=LocateRegistry.getRegistry(
-//                host,
-//                (new Integer(port)).intValue()
-//       );
-//       // Get remote object and store it in remObject:
-//       Rem remObject =
-//         (Rem)registry.lookup("Rem");
-//       // Call methods in remObject:
-//       System.out.println(remObject.getMessage());
-//     }
-//     catch(RemoteException re) {
-//       System.out.println("RemoteException: " + re);
-//     }
-//     catch(NotBoundException nbe) {
-//       System.out.println("NotBoundException: " + nbe);
-//     }
-// //    catch(MalformedURLException mfe) {
-// //      System.out.println("MalformedURLException: "
-// //                         + mfe);
-//   //  }
   }
 }

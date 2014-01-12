@@ -17,4 +17,8 @@ public class User implements Serializable{
 			return (u2.username.equals(this.username) && u2.password.equals(this.password));
 		}
 	}
+
+	public String toString(){
+		return "Usuario: "+this.username;
+	}
 }

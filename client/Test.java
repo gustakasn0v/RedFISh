@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
 
 public class Test{
 	private static Integer BUF_SIZE = 2048;
@@ -63,44 +64,126 @@ public class Test{
 
 
 	public static void main(String[] args) {
-		try{
-			String url = "rmi://localhost:30226/FileServer";
-	        FileServer server = (FileServer) Naming.lookup(url);
-	        
-	        File testFile = new File("prueba.txt");
-	        long len = testFile.length();
-	        
-	        long t;
-	        t = System.currentTimeMillis();
-	        
-	        uploadFile(server,"prueba.txt", "download.tif",new User("dreabalbas","123"));
-	        server.deleteFile("prueba.txt",new User("dreabalbas","123"));
+	  	int port = 30226;
+	  	String host = "localhost";
+	  	String authfile = "";
+	  	String commandfile = "";
 
-	        //t = (System.currentTimeMillis() - t) / 1000;
-	        //System.out.println("download: " + (len / t / 1000000d) + " MB/s");
+	  	try {
+		    Options cliOptions = new Options();
+		    String filename = "";
+
+		    cliOptions.addOption("help", false, "Print help for this application");
+		    cliOptions.addOption("m", false, "The host of the File server. Defaults to localhost");
+		    cliOptions.addOption("p", true, "The port to use. Defaults to 30226");
+		    cliOptions.addOption("f", true, "The authentication file");
+		    cliOptions.addOption("c", true, "The commands file");
+
+		    BasicParser cliParser = new BasicParser();
+		    CommandLine cl = cliParser.parse(cliOptions, args);
+
+		    if ( cl.hasOption("help") || !cl.hasOption("p") 
+		    	|| !cl.hasOption("m") ) {
+		        HelpFormatter helper = new HelpFormatter();
+		        helper.printHelp("java c_rmifs -m server -p port [-f authfile] [-c commandfile]", cliOptions);
+		    }
+		    else {
+		    	if ( cl.hasOption('m') ) {
+		    		host = cl.getOptionValue("m");
+		    	}
+		    	if ( cl.hasOption('p') ) {
+		    		port = Integer.parseInt(cl.getOptionValue("p"));
+		    	}
+		    	if ( cl.hasOption('f') ) {
+		    		authfile = cl.getOptionValue("f");
+		    	}
+		    	if ( cl.hasOption('m') ) {
+		    		commandfile = cl.getOptionValue("c");
+		    	}
+		    }
+
+		    FileServerImpl fileServer = null;
+		    try{
+		    	fileServer = new FileServerImpl(host,port);
+		    }
+		    catch (RemoteException re){
+		    	System.out.println(re);
+		    	re.printStackTrace();
+		    	System.exit(0);
+		    }
+		    catch (NotBoundException nbe){
+		    	System.out.println(nbe);
+		    	nbe.printStackTrace();
+		    	System.exit(0);
+		    }
+		    
+		    
+
+		    Registry registry = LocateRegistry.createRegistry( port );
+		    System.out.print("Iniciando el servidor:\t\t\t");
+		    registry.rebind("FileServer", fileServer);
+		    System.out.println("[   OK   ]");
+
+		    BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+		    String command, fullString;
+		    while(true){
+		    	fullString = bufferRead.readLine();
+		    	command = fullString.substring(0,2);
+		    	switch(command){
+		    		case "rls":
+		    			//
+		    			break;
+		    		case "lls":
+		    			//
+		    			break;
+		    		case "sub":
+		    		//
+		    			break;
+		    		case "baj":
+		    		//
+		    			break;
+		    		case "bor":
+		    		//
+		    			break;
+		    		case "inf":
+		    		//
+		    			break;
+		    		case "sal":
+		    		//
+		    			break;
+		    		default:
+		    			System.out.println("Comando no reconocido")
+		    	}
+		    }
 		}
-		catch(NotBoundException nbe){
-			System.out.println("Not bound");
+		catch (IOException e) {
+			if (e instanceof RemoteException){
+				System.out.println("[ FAILED ]");
+				System.out.println("Error contactando registry");
+			}
+			else if (e instanceof MalformedURLException){
+				System.out.println("[ FAILED ]");
+				System.out.println("URL de servidor malformado");
+			}
+			else{
+				System.out.println("Error leyendo la entrada estandar");
+			}
+			e.printStackTrace();
 			System.exit(0);
 		}
-		catch(MalformedURLException mue){
-			System.out.println("Malformed");
-			System.exit(0);
+
+		catch (NotBoundException e) {
+			System.out.println("Error deteniendo el servidor");
+			System.out.println(e);
+		    e.printStackTrace();
+		    System.exit(0);
 		}
-		
-		catch(RemoteException re){
-			System.out.println("RemoteException");
-			re.printStackTrace();
-			System.exit(0);
+
+		catch (ParseException e) {
+			System.out.println("Error leyendo opciones de consola");
+			System.out.println(e);
+		    e.printStackTrace();
+		    System.exit(0);
 		}
-		catch(NotAuthenticatedException nae){
-			System.out.println("Not authenticated");
-			System.exit(0);
-		}
-		catch(NotAuthorizedException nae){
-			System.out.println("Not authorized");
-			System.exit(0);
-		}
-		
 	}
 }
