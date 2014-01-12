@@ -51,7 +51,7 @@ public class a_rmifs {
 
 	    AuthDatabaseImpl authDatabase = new AuthDatabaseImpl();
 	    AuthFileParser fileParser = new AuthFileParser(filename);
-	    LinkedList<User> userList = fileParser.parse(filename);
+	    LinkedList<User> userList = fileParser.parse();
 	    for(User user : userList) {
 	    	authDatabase.addUser(user);
 	    }

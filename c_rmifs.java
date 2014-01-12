@@ -1,5 +1,4 @@
 import java.rmi.*;
-import java.io.File;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -10,6 +9,8 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import java.io.Console;
+import java.io.File;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Options;
@@ -17,9 +18,25 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.ParseException;
 
-public class Test{
+public class c_rmifs{
 	private static Integer BUF_SIZE = 2048;
 
+
+	private static String listFilesInCWD(){
+		// Directory path here
+		String path = "."; 
+
+		String files = "";
+		File folder = new File(path);
+		File[] listOfFiles = folder.listFiles(); 
+
+		for (int i = 0; i < listOfFiles.length; i++){
+			if (listOfFiles[i].isFile()){
+				files += listOfFiles[i].getName()+"\n";
+			}
+		}
+		return files;
+	}
 	private static void copy(InputStream in, OutputStream out) 
             throws IOException {
         System.out.println("using byte[] read/write");
@@ -88,10 +105,10 @@ public class Test{
 		    BasicParser cliParser = new BasicParser();
 		    CommandLine cl = cliParser.parse(cliOptions, args);
 
-		    if ( cl.hasOption("help") || !cl.hasOption("p") 
-		    	|| !cl.hasOption("m") ) {
+		    if ( cl.hasOption("help") ) {
 		        HelpFormatter helper = new HelpFormatter();
 		        helper.printHelp("java c_rmifs -m server -p port [-f authfile] [-c commandfile]", cliOptions);
+		        System.exit(0);
 		    }
 		    else {
 		    	if ( cl.hasOption('m') ) {
@@ -111,17 +128,55 @@ public class Test{
 		    String url = "rmi://"+host+":"+port+"/FileServer";
             FileServer server = (FileServer) Naming.lookup(url);
 
-		    BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+            Boolean authenticated = false;
+            User myOwner;
+            if (!authfile.equals("")){
+	            AuthFileParser fileParser = new AuthFileParser(filename);
+		    	LinkedList<User> userList = fileParser.parse();
+		    	Boolean currentIsCorrect = false;
+		    	for(User user : userList) {
+		    		currentIsCorrect = server.testUser(user);
+		    		if (currentIsCorrect) myOwner = user;
+		    		else {
+		    			System.out.println("Autenticación por archivoincorrecta para el "
+		    				+user);
+		    			authenticated = authenticated  || currentIsCorrect;
+		    		}
+		    	}
+		    }
+
+		    Console console = System.console();
+
+		    if (!authenticated){
+		    	User testUser = null;
+		    	while(!authenticated){
+			    	String username,password;
+			    	System.out.print("Introduzca su nombre de usuario: ");
+			    	username = console.readLine();
+			    	System.out.print("Introduzca su contraseña: ");
+			    	char[] passwordChars = console.readPassword();
+	        		password = new String(passwordChars);
+			    	testUser = new User(username,password);
+			    	authenticated = server.testUser(testUser);
+			    	if (!authenticated) 
+			    		System.out.println("Usuario o contraseña inválidos. Intente de nuevo");
+		    	}
+		    	myOwner = testUser;
+		    }
+
+		    
 		    String command, fullString;
 		    while(true){
-		    	fullString = bufferRead.readLine();
-		    	command = fullString.substring(0,2);
+		    	System.out.print("$>");
+		    	fullString = console.readLine();
+		    	command = fullString.substring(0,3).trim();
 		    	switch(command){
 		    		case "rls":
 		    			//
 		    			break;
 		    		case "lls":
-		    			//
+		    			System.out.print("sapo teton");
+		    			System.out.println(listFilesInCWD());
 		    			break;
 		    		case "sub":
 		    		//
@@ -136,32 +191,47 @@ public class Test{
 		    		//
 		    			break;
 		    		case "sal":
-		    		//
+		    			System.exit(0);
 		    			break;
 		    		default:
 		    			System.out.println("Comando no reconocido");
 		    	}
 		    }
 		}
+
 		catch(NotBoundException nbe){
             System.out.println("El servidor no se encuentra iniciado");
             System.exit(0);
         }
-        catch(MalformedURLException mue){
-            System.out.println("Error no esperado con el URL del servidor");
-            System.exit(0);
-        }
-        catch(RemoteException re){
-            System.out.println("Excepción remota: "+re);
-            re.printStackTrace();
-            System.exit(0);
-        }
-        catch(NotAuthenticatedException nae){
-            System.out.println("No estás autenticado");
-            System.exit(0);
-        }
-        catch(NotAuthorizedException nae){
-            System.out.println("No estás autorizado para realizar esa operación");
-        }
+
+        // catch(NotAuthenticatedException nae){
+        //     System.out.println("No estás autenticado");
+        //     System.exit(0);
+        // }
+
+        // catch(NotAuthorizedException nae){
+        //     System.out.println("No estás autorizado para realizar esa operación");
+        // }
+
+        catch (IOException e) {
+			if (e instanceof RemoteException){
+				System.out.println("Error de llamadas a servidor");
+			}
+			else if (e instanceof MalformedURLException){
+				System.out.println("URL de servidor malformado");
+			}
+			else{
+				System.out.println("Error leyendo la entrada estandar");
+			}
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+		catch (ParseException e) {
+			System.out.println("Error leyendo opciones de consola");
+			System.out.println(e);
+		    e.printStackTrace();
+		    System.exit(0);
+		}
 	}
 }

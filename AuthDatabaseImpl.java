@@ -33,9 +33,8 @@ public class AuthDatabaseImpl extends UnicastRemoteObject implements AuthDatabas
     LinkedList<User> authenticated = new LinkedList<User>();
     System.out.println(""+credentials.size());
     for(User user : credentials){
-      System.out.println("WEBBOOOO");
-      System.out.println(user.username);
-      if (this.credentialDB.get(user.username).equals(user.password)){
+      if ((this.credentialDB.get(user.username) != null 
+        && this.credentialDB.get(user.username).equals(user.password))){
         authenticated.add(user);
       }
       

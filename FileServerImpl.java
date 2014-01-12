@@ -28,6 +28,17 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 		return this.history.toString();
 	}
 
+	public Boolean testUser(User user) throws RemoteException{
+		try{
+			authenticate(user);
+			return true;
+		}
+		catch(NotAuthenticatedException ne){
+			return false;
+		}
+
+	}
+
 	public FileServerImpl(String authHost, int authPort) throws RemoteException,NotBoundException{
 		try{
 			// No tengo idea que agregar a la lista de archivos del servidor
@@ -50,10 +61,16 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 	}
 
 	private void authenticate(User user) throws NotAuthenticatedException,RemoteException{
-		LinkedList<User> credentials = new LinkedList<User>();
-		credentials.add(user);
-		if (this.authServer.authenticate(credentials).size() == 0)
-			throw new NotAuthenticatedException();
+		try{
+			LinkedList<User> credentials = new LinkedList<User>();
+			credentials.add(user);
+			if (this.authServer.authenticate(credentials).size() == 0)
+				throw new NotAuthenticatedException();
+		}
+		catch (RemoteException re){
+			throw new RemoteException("Error autenticando al usuario");
+		}
+		
 	}
 
 	public InputStream getInputStream(File f,User user) throws IOException,RemoteException,NotAuthenticatedException {

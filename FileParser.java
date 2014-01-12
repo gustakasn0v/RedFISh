@@ -5,5 +5,5 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface FileParser{
-	public LinkedList<User> parse(String filename) throws FileNotFoundException;
+	public LinkedList<User> parse() throws FileNotFoundException;
 }

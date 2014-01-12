@@ -33,10 +33,10 @@ public class s_rmifs {
 	    BasicParser cliParser = new BasicParser();
 	    CommandLine cl = cliParser.parse(cliOptions, args);
 
-	    if ( cl.hasOption("help") || !cl.hasOption('h') 
-	    	|| !cl.hasOption('r') || !cl.hasOption('l')) {
+	    if ( cl.hasOption("help") ) {
 	        HelpFormatter helper = new HelpFormatter();
 	        helper.printHelp("java s_rmifs -l port -h authhost -r authport", cliOptions);
+	        System.exit(0);
 	    }
 	    else {
 	    	if ( cl.hasOption('h') ) {

@@ -12,9 +12,9 @@ public class AuthFileParser implements FileParser{
 			this.filename = fn;
 		}
 
-		public LinkedList<User> parse(String filename) throws FileNotFoundException{
+		public LinkedList<User> parse() throws FileNotFoundException{
 			LinkedList<User> userList = new LinkedList<User>();
-			BufferedReader fileHandler = new BufferedReader(new FileReader(filename));
+			BufferedReader fileHandler = new BufferedReader(new FileReader(this.filename));
 			String line;
 			String user,pass;
 			try{
