@@ -49,9 +49,9 @@ public class c_rmifs{
         out.close();
     }
 
-    public static Boolean uploadFile(FileServer server,String src, String dest,User owner) throws RemoteException,NotAuthenticatedException{
+    public static Boolean uploadFile(FileServer server,String src, User owner) throws RemoteException,NotAuthenticatedException{
 		try{
-			copy (new FileInputStream(src), server.getOutputStream(new File(dest),owner));
+			copy (new FileInputStream(src), server.getOutputStream(new File(src),owner));
 		}
 		
 		catch(FileNotFoundException e){
@@ -67,9 +67,9 @@ public class c_rmifs{
 		
 	}
 
-	public static Boolean downloadFile(FileServer server,String src, String dest,User downloader) throws RemoteException,NotAuthenticatedException{
+	public static Boolean downloadFile(FileServer server,String src,User downloader) throws RemoteException,NotAuthenticatedException{
 		try{
-			copy (server.getInputStream(new File(src),downloader), new FileOutputStream(dest));
+			copy (server.getInputStream(new File(src),downloader), new FileOutputStream(src));
 		}
 		
 		catch(FileNotFoundException e){
@@ -129,7 +129,7 @@ public class c_rmifs{
             FileServer server = (FileServer) Naming.lookup(url);
 
             Boolean authenticated = false;
-            User myOwner;
+            User myOwner = null;
             if (!authfile.equals("")){
 	            AuthFileParser fileParser = new AuthFileParser(filename);
 		    	LinkedList<User> userList = fileParser.parse();
@@ -165,27 +165,27 @@ public class c_rmifs{
 		    }
 
 		    
-		    String command, fullString;
+		    String command, fullString, arg;
 		    while(true){
 		    	System.out.print("$>");
 		    	fullString = console.readLine();
 		    	command = fullString.substring(0,3).trim();
+		    	arg = fullString.substring(3,fullString.length()).trim();
 		    	switch(command){
 		    		case "rls":
-		    			//
+		    			System.out.println(server.listFiles(myOwner));
 		    			break;
 		    		case "lls":
-		    			System.out.print("sapo teton");
 		    			System.out.println(listFilesInCWD());
 		    			break;
 		    		case "sub":
-		    		//
+		    			uploadFile(server,arg,myOwner);
 		    			break;
 		    		case "baj":
-		    		//
+		    			downloadFile(server,arg,myOwner);
 		    			break;
 		    		case "bor":
-		    		//
+		    			server.deleteFile(arg,myOwner);
 		    			break;
 		    		case "inf":
 		    		//
@@ -204,14 +204,14 @@ public class c_rmifs{
             System.exit(0);
         }
 
-        // catch(NotAuthenticatedException nae){
-        //     System.out.println("No estás autenticado");
-        //     System.exit(0);
-        // }
+        catch(NotAuthenticatedException nae){
+            System.out.println("No estás autenticado");
+            System.exit(0);
+        }
 
-        // catch(NotAuthorizedException nae){
-        //     System.out.println("No estás autorizado para realizar esa operación");
-        // }
+        catch(NotAuthorizedException nae){
+            System.out.println("No estás autorizado para realizar esa operación");
+        }
 
         catch (IOException e) {
 			if (e instanceof RemoteException){
