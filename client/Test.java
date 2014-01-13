@@ -116,6 +116,11 @@ public class Test{
 
     /**
     * Programa principal del cliente.
+    * El cliente se conecta al servidor de archivos. En caso de que se haya
+    * colocado un archivo de comandos, se procesan los comandos allí escritos.
+    * Si el archivo no contiene el comando 'sal', o si no se especificó un  
+    * archivo de comandos, se dispone una consola para que el usuario
+    * introduzca los comandos que desee ejecutar.
     */
     public static void main(String[] args) {
         int port = 30226;
