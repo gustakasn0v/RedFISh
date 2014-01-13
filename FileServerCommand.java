@@ -1,16 +1,46 @@
+/**
+ * FileServerCommand.java
+ *
+ * Septiembre - Diciembre 2013
+ *
+ * Implementación de la clase de los comandos del servidor
+ *
+ * @author Andrea Balbás        09-10076
+ * @author Gustavo El Khoury    10-10226
+ */
 public class FileServerCommand{
+        /**
+        * Nombre del comando
+        */
 	private String command;
 	
+	/**
+        * Argumento del comando
+        */
 	private String argument;
 	
+	/**
+        * Usuario que ejecutó el comando
+        */
 	private User executor;
 
+	/**
+        * Constructor de la clase.
+        * 
+        * @param command Nombre del comando a crear.
+        * @param argument Argumento del comando a crear.
+        * @param executor Usuario que ejecuta el comando.
+        */
 	public FileServerCommand(String command, String argument, User executor){
 		this.command = command;
 		this.argument = argument;
 		this.executor = executor;
 	}
-
+	
+        /**
+        * Método para expresar en forma de String la información relacionada
+        * a un comando.
+        */
 	public String toString(){
 		return this.executor.toString() + " | Comando: " + this.command +
 		" | Argumento: "+this.argument;

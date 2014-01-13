@@ -10,12 +10,27 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.ParseException;
 
-/** Get a Rem object from the specified remote host.
- *  Use its methods as though it were a local object.
- * @see Rem
+/**
+ * a_rmifs.java
+ *
+ * Septiembre - Diciembre 2013
+ *
+ * Implementación del servidor de autenticación
+ *
+ * @author Andrea Balbás        09-10076
+ * @author Gustavo El Khoury    10-10226
  */
-
 public class a_rmifs {
+
+     /**
+    * Programa principal del servidor de autenticación.
+    * El servidor analiza el archivo con los usuarios y claves,
+    * y agrega a la base de datos los usuarios que se encuentran especificados
+    * en el archivo. Si se especificó un puerto, será utilizado por el registry
+    * para contener la información de los objetos remotos publicados por el 
+    * servidor de autenticación; de lo contrario, se utiliza por defecto el
+    * puerto 20226.
+    */
   public static void main(String[] args) {
   	int port = 20226;
 
