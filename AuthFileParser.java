@@ -4,14 +4,41 @@ import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * AuthFileParser.java
+ *
+ * Septiembre - Diciembre 2013
+ *
+ * Implementación de la interfaz FileParser, que se utilizará para hacer
+ * el análisis del archivo que contiene los usuarios autorizados para acceder
+ * al servidor de archivos.
+ * Implementa la interfaz FileParser.
+ *
+ * @author Andrea Balbás        09-10076
+ * @author Gustavo El Khoury    10-10226
+ */
 public class AuthFileParser implements FileParser{
 
+                /**
+                * Nombre del archivo que se va a analizar.
+                */
 		public String filename;
 
+		/**
+                * Constructor de la clase.
+                * @param fn Nombre del archivo a analizar
+                */
 		public AuthFileParser(String fn){
 			this.filename = fn;
 		}
 
+		/**
+                * Método que realiza el análisis del archivo.
+                * @return Lista con los usuarios existentes en el archivo 
+                * y sus contraseñas.
+                * @throws FileNotFoundException Si el archivo que se intenta analizar
+                *         no existe.
+                */
 		public LinkedList<User> parse() throws FileNotFoundException{
 			LinkedList<User> userList = new LinkedList<User>();
 			BufferedReader fileHandler = new BufferedReader(new FileReader(this.filename));

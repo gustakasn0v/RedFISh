@@ -92,7 +92,7 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
         * 
         * @param user Usuario cuyas credenciales serán validadas.
         * @return true en caso de que las credenciales sean correctas, 
-                  false en caso contrario.
+        *         false en caso contrario.
         * @throws RemoteException En caso de error en la llamada remota. 
         */
 	public Boolean testUser(User user) throws RemoteException{
@@ -172,7 +172,7 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
         * 
         * @param src Nombre del archivo que se desea eliminar.
         * @param credentials Credenciales del usuario que ejecuta el comando
-                             de eliminación de archivo.
+        *                    de eliminación de archivo.
         * @throws RemoteException En caso de que ocurra algún error en la llamada remota.
         * @throws NotAuthorizedException Si el usuario no está autorizado para eliminar el archivo.
         * @throws FileNotFoundException En caso de que el nombre del archivo no exista.
