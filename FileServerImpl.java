@@ -13,21 +13,88 @@ import java.io.File;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
+/**
+ * FileServerImpl.java
+ *
+ * Septiembre - Diciembre 2013
+ *
+ * Implementación de las funciones del servidor de archivos
+ *
+ * @author Andrea Balbás        09-10076
+ * @author Gustavo El Khoury    10-10226
+ */
 public class FileServerImpl extends UnicastRemoteObject implements FileServer{
+	/**
+	* Tabla de hash donde la clave es el nombre del archivo, y el valor
+	* el objeto correspondiente al archivo con ese nombre
+	*/
 	private Hashtable<String,RMIFile> serverFiles;
 
+	/**
+        * Base de datos para la autenticación de los usuarios.
+        */
 	private AuthDatabase authServer;
 
+	/**
+        * Cola circular en la que se almacena el historial con los comandos 
+        * enviados por los clientes al servidor de archivos.
+        */
 	private CircularFifoQueue<FileServerCommand> history;
 
-	private static Integer BUF_SIZE = 2048;
-
+	/**
+        * Tamaño de la cola donde se almacenan los comandos del historial.
+        */
 	private static Integer HIST_SIZE = 20;
 
+        /**
+        * Constructor de la clase.
+        * 
+        * @param authHost Host del servidor de autenticación.
+        * @param authPort Puerto del servidor de autenticación.
+        * @throws RemoteException Si no se puede contactar el registro de autenticación.
+        * @throws NotBoundException Si no se puede obtener el objeto de autenticación.
+        */
+        public FileServerImpl(String authHost, int authPort) throws RemoteException,NotBoundException{
+                try{
+                        // No tengo idea que agregar a la lista de archivos del servidor
+                        this.serverFiles = new Hashtable<String,RMIFile>();
+
+                        //Creo la conexion al servidor de autenticacion
+                        Registry registry = LocateRegistry.getRegistry(authHost,authPort);
+                    this.authServer = (AuthDatabase)registry.lookup("Auth");
+
+                    this.history = new CircularFifoQueue<FileServerCommand>(this.HIST_SIZE);
+                }
+                catch(RemoteException re){
+                        throw new RemoteException("Imposible contactar registro de autenticación",re);
+                }
+                catch(NotBoundException nbe){
+                        throw new RemoteException("Imposible obtener objeto de autenticación",nbe);
+                }
+                
+                
+        }
+        
+        /**
+        * Lista los últimos 20 comandos que los clientes han enviado
+        * al servidor.
+        *
+        * @return String con los últimos 20 comandos que han sido enviados
+        *         al servidor. Incluye el nombre del comando, el argumento
+        *         en caso de que aplique, y el usuario que lo ejecutó.
+        */
 	public String getHistory(){
 		return this.history.toString();
 	}
 
+	/**
+        * Valida la autenticación de un usuario.
+        * 
+        * @param user Usuario cuyas credenciales serán validadas.
+        * @return true en caso de que las credenciales sean correctas, 
+                  false en caso contrario.
+        * @throws RemoteException En caso de error en la llamada remota. 
+        */
 	public Boolean testUser(User user) throws RemoteException{
 		try{
 			authenticate(user);
@@ -39,27 +106,13 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 
 	}
 
-	public FileServerImpl(String authHost, int authPort) throws RemoteException,NotBoundException{
-		try{
-			// No tengo idea que agregar a la lista de archivos del servidor
-			this.serverFiles = new Hashtable<String,RMIFile>();
-
-			//Creo la conexion al servidor de autenticacion
-			Registry registry = LocateRegistry.getRegistry(authHost,authPort);
-		    this.authServer = (AuthDatabase)registry.lookup("Auth");
-
-		    this.history = new CircularFifoQueue<FileServerCommand>(this.HIST_SIZE);
-		}
-		catch(RemoteException re){
-			throw new RemoteException("Imposible contactar registro de autenticación",re);
-		}
-		catch(NotBoundException nbe){
-			throw new RemoteException("Imposible obtener objeto de autenticación",nbe);
-		}
-		
-		
-	}
-
+        /**
+        * Autentica a un usuario.
+        * 
+        * @param user Usuario a autenticar.
+        * @throws RemoteException En caso de error en la llamada remota.
+        * @throws NotAuthenticatedException En caso de que las credenciales sean inválidas.
+        */
 	private void authenticate(User user) throws NotAuthenticatedException,RemoteException{
 		try{
 			LinkedList<User> credentials = new LinkedList<User>();
@@ -78,8 +131,8 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 		this.history.add(
 			new FileServerCommand("baj",f.getName(),user)
 		);
-    	return new RMIInputStream(new RMIInputStreamImpl(new 
-    		FileInputStream(f)));
+                return new RMIInputStream(new RMIInputStreamImpl(new 
+                    FileInputStream(f)));
 	}
 
 	public OutputStream getOutputStream(File f,User owner) throws IOException,RemoteException,NotAuthenticatedException {
@@ -95,6 +148,15 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 	    return new RMIOutputStream(new RMIOutputStreamImpl(new FileOutputStream(f)));
 	}
 
+	/**
+        * Lista los archivos existentes en el servidor de archivos.
+        * 
+        * @param user Usuario que ejecuta el comando correspondiente a listar
+        *             los archivos del servidor de archivos.
+        * @return String con los nombres de los archivos existentes en el servidor.
+        * @throws RemoteException En caso de que ocurra algún error en la llamada remota.
+        * @throws NotAuthenticatedException Si el usuario no está autenticado
+        */
 	public String listFiles(User user) throws RemoteException,NotAuthenticatedException{
 		authenticate(user);
 		this.history.add(
@@ -104,6 +166,17 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 		return listOfFiles.toString();
 	}
 
+	/**
+        * Dado el nombre de un archivo y las credenciales de un usuario, el
+        * archivo es eliminado si el usuario es su propietario.
+        * 
+        * @param src Nombre del archivo que se desea eliminar.
+        * @param credentials Credenciales del usuario que ejecuta el comando
+                             de eliminación de archivo.
+        * @throws RemoteException En caso de que ocurra algún error en la llamada remota.
+        * @throws NotAuthorizedException Si el usuario no está autorizado para eliminar el archivo.
+        * @throws FileNotFoundException En caso de que el nombre del archivo no exista.
+        */
 	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException,FileNotFoundException{
 		if (credentials.equals(this.serverFiles.get(src).owner)){
 			File toDelete = new File(src);
