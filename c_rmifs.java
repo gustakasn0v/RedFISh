@@ -90,6 +90,43 @@ public class c_rmifs{
 		
 	}
 
+	private static void executeCommands(String command, String arg, FileServer server, User myOwner)
+	throws RemoteException,NotAuthenticatedException {
+		switch(command){
+    		case "rls":
+    			System.out.println(server.listFiles(myOwner));
+    			break;
+    		case "lls":
+    			System.out.println(listFilesInCWD());
+    			break;
+    		case "sub":
+    			uploadFile(server,arg,myOwner);
+    			break;
+    		case "baj":
+    			downloadFile(server,arg,myOwner);
+    			break;
+    		case "bor":
+    			try{
+    				server.deleteFile(arg,myOwner);
+    			}
+    			catch(NotAuthorizedException nae){
+ 				   System.out.println("No estás autorizado para realizar esa operación");
+				}
+				catch(FileNotFoundException fnfe){
+ 				   System.out.println("El archivo especificado no existe");
+				}
+    			break;
+    		case "inf":
+    		//
+    			break;
+    		case "sal":
+    			System.exit(0);
+    			break;
+    		default:
+    			System.out.println("Comando no reconocido");
+    			System.out.print("$>");
+    	}
+	}
 
 	public static void main(String[] args) {
 	  	int port = 30226;
@@ -169,48 +206,29 @@ public class c_rmifs{
 		    	myOwner = testUser;
 		    }
 
-		    
-		    String command, fullString, arg;
-		    while(true){
-		    	System.out.print("$>");
-		    	fullString = console.readLine();
-		    	command = fullString.substring(0,3).trim();
-		    	arg = fullString.substring(3,fullString.length()).trim();
-		    	switch(command){
-		    		case "rls":
-		    			System.out.println(server.listFiles(myOwner));
-		    			break;
-		    		case "lls":
-		    			System.out.println(listFilesInCWD());
-		    			break;
-		    		case "sub":
-		    			uploadFile(server,arg,myOwner);
-		    			break;
-		    		case "baj":
-		    			downloadFile(server,arg,myOwner);
-		    			break;
-		    		case "bor":
-		    			try{
-		    				server.deleteFile(arg,myOwner);
-		    			}
-		    			catch(NotAuthorizedException nae){
-         				   System.out.println("No estás autorizado para realizar esa operación");
-        				}
-        				catch(FileNotFoundException fnfe){
-         				   System.out.println("El archivo especificado no existe");
-        				}
-		    			break;
-		    		case "inf":
-		    		//
-		    			break;
-		    		case "sal":
-		    			System.exit(0);
-		    			break;
-		    		default:
-		    			System.out.println("Comando no reconocido");
-		    			System.out.print("$>");
+		    // Si se especifica un archivo de comandos, se ejecuta aquí
+		    Boolean runShell = true;
+		    if (!commandfile.equals("")){
+		    	CommandFileParser commParser = new CommandFileParser(commandfile,myOwner);
+		    	LinkedList<FileServerCommand> commList = commParser.parse();
+		    	for(FileServerCommand comm : commList){
+		    		executeCommands(comm.command,comm.argument,server,comm.executor);
+		    		runShell = !comm.argument.equals("sal");
 		    	}
+
 		    }
+		    
+		    if (runShell){
+		    	String command, fullString, arg;
+			    while(true){
+			    	System.out.print("$>");
+			    	fullString = console.readLine();
+			    	command = fullString.substring(0,3).trim();
+			    	arg = fullString.substring(3,fullString.length()).trim();
+			    	executeCommands(command,arg,server,myOwner);
+			    }	
+		    }
+		    
 		}
 
 		catch(NotBoundException nbe){

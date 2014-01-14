@@ -12,17 +12,17 @@ public class FileServerCommand{
         /**
         * Nombre del comando
         */
-	private String command;
+	public String command;
 	
 	/**
         * Argumento del comando
         */
-	private String argument;
+	public String argument;
 	
 	/**
         * Usuario que ejecutó el comando
         */
-	private User executor;
+	public User executor;
 
 	/**
         * Constructor de la clase.

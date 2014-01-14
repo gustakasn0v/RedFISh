@@ -23,5 +23,5 @@ public interface FileParser{
         * @throws FileNotFoundException Si el archivo que se intenta analizar
         *         no existe.
         */
-	public LinkedList<User> parse() throws FileNotFoundException;
+	public LinkedList parse() throws FileNotFoundException;
 }
