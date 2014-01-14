@@ -62,7 +62,6 @@ public class AuthDatabaseImpl extends UnicastRemoteObject implements AuthDatabas
    */
   public LinkedList<User> authenticate(LinkedList<User> credentials) throws RemoteException{
     LinkedList<User> authenticated = new LinkedList<User>();
-    System.out.println(""+credentials.size());
     for(User user : credentials){
       if ((this.credentialDB.get(user.username) != null 
         && this.credentialDB.get(user.username).equals(user.password))){

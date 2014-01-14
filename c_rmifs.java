@@ -59,6 +59,11 @@ public class c_rmifs{
 			return false;
 		}
 
+		catch(FileExistsException fee){
+            System.out.println("El archivo ya existe en el servidor");
+            
+        }
+
 		catch(IOException e){
 			System.out.println("Excepción no esperada de IO");
 			e.printStackTrace();
@@ -185,7 +190,15 @@ public class c_rmifs{
 		    			downloadFile(server,arg,myOwner);
 		    			break;
 		    		case "bor":
-		    			server.deleteFile(arg,myOwner);
+		    			try{
+		    				server.deleteFile(arg,myOwner);
+		    			}
+		    			catch(NotAuthorizedException nae){
+         				   System.out.println("No estás autorizado para realizar esa operación");
+        				}
+        				catch(FileNotFoundException fnfe){
+         				   System.out.println("El archivo especificado no existe");
+        				}
 		    			break;
 		    		case "inf":
 		    		//
@@ -195,6 +208,7 @@ public class c_rmifs{
 		    			break;
 		    		default:
 		    			System.out.println("Comando no reconocido");
+		    			System.out.print("$>");
 		    	}
 		    }
 		}
@@ -204,13 +218,10 @@ public class c_rmifs{
             System.exit(0);
         }
 
+        
         catch(NotAuthenticatedException nae){
             System.out.println("No estás autenticado");
             System.exit(0);
-        }
-
-        catch(NotAuthorizedException nae){
-            System.out.println("No estás autorizado para realizar esa operación");
         }
 
         catch (IOException e) {

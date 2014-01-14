@@ -42,7 +42,7 @@ public class FileServerCommand{
         * a un comando.
         */
 	public String toString(){
-		return this.executor.toString() + " | Comando: " + this.command +
-		" | Argumento: "+this.argument;
+		return "Comando: " + this.command +
+		" | Argumento: "+this.argument+" | " + this.executor.toString();
 	}
 }

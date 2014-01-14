@@ -47,6 +47,6 @@ public class RMIFile extends File{
         */
 	public String toString(){
 		System.out.println(this.getName());
-		return "Nombre: "+this.getName() + " | " + this.owner.toString();
+		return "Nombre: "+this.getName() + " | " + this.owner.toString()+"\n";
 	}
 }

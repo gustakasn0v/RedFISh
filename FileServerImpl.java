@@ -46,6 +46,19 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
         */
 	private static Integer HIST_SIZE = 20;
 
+	private void addCWDFilesToServer() {
+		File folder = new File(".");
+	    for (final File fileEntry : folder.listFiles()) {
+	        if (!fileEntry.isDirectory()) {
+	            RMIFile newFile = new RMIFile(
+	            	fileEntry.getName(),
+	            	new User(null,null)
+	         	);
+				this.serverFiles.put(fileEntry.getName(),newFile);
+	        }
+	    }
+	}
+
         /**
         * Constructor de la clase.
         * 
@@ -58,6 +71,7 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
                 try{
                         // No tengo idea que agregar a la lista de archivos del servidor
                         this.serverFiles = new Hashtable<String,RMIFile>();
+                        this.addCWDFilesToServer();
 
                         //Creo la conexion al servidor de autenticacion
                         Registry registry = LocateRegistry.getRegistry(authHost,authPort);
@@ -135,8 +149,10 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
                     FileInputStream(f)));
 	}
 
-	public OutputStream getOutputStream(File f,User owner) throws IOException,RemoteException,NotAuthenticatedException {
+	public OutputStream getOutputStream(File f,User owner) throws IOException, FileExistsException,
+	RemoteException,NotAuthenticatedException {
 		authenticate(owner);
+		if (this.serverFiles.get(f.getName()) != null ) throw new FileExistsException();
 		RMIFile newFile = new RMIFile(f.getName(),new User(owner.username,owner.password));
 		
 		serverFiles.put(f.getName(),newFile);
@@ -187,7 +203,7 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 				new FileServerCommand("bor",src,credentials)
 			);
 
-			toDelete.delete();
+			System.out.println(toDelete.delete());
 		}
 		else throw new NotAuthorizedException();	
 	}

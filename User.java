@@ -41,10 +41,14 @@ public class User implements Serializable{
         * @param u Objeto con el que se va a comparar el usuario en cuestión.
         */
 	public boolean equals(Object u){
-		if (!(u instanceof User)) return false;
+		if (!(u instanceof User)
+			|| this.username == null
+			|| this.password == null) return false;
 		else {
 			User u2 = (User) u;
-			return (u2.username.equals(this.username) && u2.password.equals(this.password));
+			return (
+				u2.username != null && u2.password != null &&
+				u2.username.equals(this.username) && u2.password.equals(this.password));
 		}
 	}
 
@@ -53,6 +57,7 @@ public class User implements Serializable{
         * a un usuario.
         */
 	public String toString(){
+		if (this.username == null ) return "Usuario: Fileserver";
 		return "Usuario: "+this.username;
 	}
 }

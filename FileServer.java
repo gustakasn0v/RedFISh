@@ -44,7 +44,7 @@ public interface FileServer extends Remote{
 
 	public InputStream getInputStream(File f, User user) throws IOException,RemoteException,NotAuthenticatedException;
 
-	public OutputStream getOutputStream(File f,User owner) throws IOException,RemoteException,NotAuthenticatedException;
+	public OutputStream getOutputStream(File f,User owner) throws IOException,RemoteException,NotAuthenticatedException,FileExistsException;
 
 	/**
         * Dado el nombre de un archivo y las credenciales de un usuario, el
