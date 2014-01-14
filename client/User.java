@@ -23,7 +23,7 @@ public class User implements Serializable{
         */
 	public String password;
 
-	 /**
+	/**
         * Constructor de la clase.
         * 
         * @param user Nommbre de usuario del usuario a crear.
