@@ -37,13 +37,39 @@ public interface FileServer extends Remote{
         * 
         * @param user Usuario cuyas credenciales serán validadas.
         * @return true en caso de que las credenciales sean correctas, 
-                  false en caso contrario.
+        *         false en caso contrario.
         * @throws RemoteException En caso de error en la llamada remota. 
         */
 	public Boolean testUser(User user) throws RemoteException;
 
+	/**
+        * Dado un archivo y un usuario que lo sube al servidor de archivos,
+        * se retorna el stream de entrada correspondiente a los bytes del archivo.
+        *
+        * @param f Archivo que se desea subir al servidor.
+        * @param user Usuario que desea subir el archivo al servidor.
+        * @return Stream de entrada que contiene los bytes del archivo.
+        * @throws IOException En caso de error en la lectura/escritura.
+        * @throws RemoteException En caso de error en la llamada remota. 
+        * @throws NotAuthenticatedException En caso de que el usuario no esté
+        *          autenticado.
+        */
 	public InputStream getInputStream(File f, User user) throws IOException,RemoteException,NotAuthenticatedException;
 
+	/**
+        * Dado un archivo y un usuario que desea descargarlo del servidor de
+        * archivos, se retorna el stream de salida correspondiente a los bytes
+        * del archivo.
+        *
+        * @param f Archivo que se desea descargar del servidor.
+        * @param owner Usuario que desea descargar el archivo del servidor.
+        * @return Stream de salida que contiene los bytes del archivo.
+        * @throws IOException En caso de error en la lectura/escritura.
+        * @throws RemoteException En caso de error en la llamada remota. 
+        * @throws NotAuthenticatedException En caso de que el usuario no esté
+        *          autenticado.
+        * @throws FileExistsException
+        */
 	public OutputStream getOutputStream(File f,User owner) throws IOException,RemoteException,NotAuthenticatedException,FileExistsException;
 
 	/**

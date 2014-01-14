@@ -140,6 +140,18 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 		
 	}
 
+        /**
+        * Dado un archivo y un usuario que lo sube al servidor de archivos,
+        * se retorna el stream de entrada correspondiente a los bytes del archivo.
+        *
+        * @param f Archivo que se desea subir al servidor.
+        * @param user Usuario que desea subir el archivo al servidor.
+        * @return Stream de entrada que contiene los bytes del archivo.
+        * @throws IOException En caso de error en la lectura/escritura.
+        * @throws RemoteException En caso de error en la llamada remota. 
+        * @throws NotAuthenticatedException En caso de que el usuario no esté
+        *          autenticado.
+        */
 	public InputStream getInputStream(File f,User user) throws IOException,RemoteException,NotAuthenticatedException {
 		authenticate(user);
 		this.history.add(
@@ -149,6 +161,20 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
                     FileInputStream(f)));
 	}
 
+	/**
+        * Dado un archivo y un usuario que desea descargarlo del servidor de
+        * archivos, se retorna el stream de salida correspondiente a los bytes
+        * del archivo.
+        *
+        * @param f Archivo que se desea descargar del servidor.
+        * @param owner Usuario que desea descargar el archivo del servidor.
+        * @return Stream de salida que contiene los bytes del archivo.
+        * @throws IOException En caso de error en la lectura/escritura.
+        * @throws RemoteException En caso de error en la llamada remota. 
+        * @throws NotAuthenticatedException En caso de que el usuario no esté
+        *          autenticado.
+        * @throws FileExistsException
+        */
 	public OutputStream getOutputStream(File f,User owner) throws IOException, FileExistsException,
 	RemoteException,NotAuthenticatedException {
 		authenticate(owner);
