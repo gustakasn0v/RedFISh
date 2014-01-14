@@ -138,7 +138,7 @@ public class c_rmifs{
 		    		currentIsCorrect = server.testUser(user);
 		    		if (currentIsCorrect) myOwner = user;
 		    		else {
-		    			System.out.println("Autenticación por archivoincorrecta para el "
+		    			System.out.println("Autenticación por archivo incorrecta para el "
 		    				+user);
 		    			authenticated = authenticated  || currentIsCorrect;
 		    		}

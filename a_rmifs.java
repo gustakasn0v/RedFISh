@@ -53,7 +53,7 @@ public class a_rmifs {
 	    	if ( !cl.hasOption('f') ) {
 	    		System.out.println("A database file must be specified with -f option");
 		        HelpFormatter helper = new HelpFormatter();
-		        helper.printHelp("RMIFS Authentication Server", cliOptions);
+		        helper.printHelp("java a_rmifs -f authfile -p port", cliOptions);
 		        System.exit(0);
 	    	}
 	    	else{
