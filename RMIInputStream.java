@@ -2,8 +2,20 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.InputStream;
 
+/**
+ * RMIInputStream.java
+ *
+ * Septiembre - Diciembre 2013
+ *
+ * Clase de los stream de bytes de entrada para RMI.
+ * Extiende a la clase InputStream e implementa la interfaz Serializable.
+ *
+ * @author Andrea Balbás        09-10076
+ * @author Gustavo El Khoury    10-10226
+ */
 public class RMIInputStream extends InputStream implements 
         Serializable {
+        
     /**
     * Stream de entrada de bytes por RMI. 
     */
