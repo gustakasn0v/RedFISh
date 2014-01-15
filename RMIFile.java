@@ -14,12 +14,18 @@ import java.util.LinkedList;
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */
-public class RMIFile extends File{
+public class RMIFile implements Serializable{
         
         /**
         * Usuario propietario del archivo.
         */
-	public static User owner;
+	public String owner;
+
+        /**
+        * Nombre del archivo.
+        */
+
+	public String filename;
 
 	/**
         * Constructor de la clase.
@@ -27,18 +33,9 @@ public class RMIFile extends File{
         * @param filename Nombre del archivo.
         * @param owner Usuario propietario del archivo.
         */
-	public RMIFile(String filename,User owner){
-		super(filename);
+	public RMIFile(String filename,String owner){
+		this.filename = filename;
 		this.owner = owner;
-	}
-
-	/**
-        * Constructor de la clase.
-        * 
-        * @param filename Nombre del archivo.
-        */
-	public RMIFile(String filename){
-		super(filename);
 	}
 
 	/**
@@ -46,7 +43,6 @@ public class RMIFile extends File{
         * a un archivo.
         */
 	public String toString(){
-		System.out.println(this.getName());
-		return "Nombre: "+this.getName() + " | " + this.owner.toString()+"\n";
+		return "Nombre: "+this.filename + " | " + this.owner + "\n";
 	}
 }
