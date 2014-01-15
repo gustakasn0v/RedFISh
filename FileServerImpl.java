@@ -52,7 +52,7 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 	        if (!fileEntry.isDirectory()) {
 	            RMIFile newFile = new RMIFile(
 	            	fileEntry.getName(),
-	            	new User(null,null)
+	            	new User("servidor","servidor")
 	         	);
 				this.serverFiles.put(fileEntry.getName(),newFile);
 	        }

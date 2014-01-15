@@ -23,15 +23,25 @@ import org.apache.commons.cli.ParseException;
  *
  * Septiembre - Diciembre 2013
  *
- * Programa cliente.
+ * Programa cliente. 
  *
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */
 public class c_rmifs{
+
+        /**
+        *Tamaño del buffer
+        */
 	private static Integer BUF_SIZE = 2048;
 
-
+        /**
+        * Lista los nombres de los archivos presentes en el directorio
+        * actual de trabajo del cliente.
+        *
+        * @return String con los nombres de archivos del directorio
+        *         de trabajo actual del cliente.
+        */
 	private static String listFilesInCWD(){
 		String path = "."; 
 
@@ -46,6 +56,15 @@ public class c_rmifs{
 		}
 		return files;
 	}
+
+	/**
+        * Método para copiar los bytes de un stream de bytes de entrada a
+        * un stream de bytes de salida.
+        *
+        * @param in Stream de bytes de entrada.
+        * @param out Stream de de bytes salida.
+        * @throws IOException En caso de error en la lectura/escritura.
+        */
 	private static void copy(InputStream in, OutputStream out) 
             throws IOException {
         System.out.println("using byte[] read/write");
@@ -58,6 +77,20 @@ public class c_rmifs{
         out.close();
     }
 
+    /**
+    * Método para subir un archivo al servidor de archivos.
+    *
+    * @param server Servidor de archivos al que se desea subir el archivo.
+    * @param src Nombre del archivo que se desea subir al servidor.
+    * @param owner Usuario que sube el archivo y que por tanto será 
+    *        su propietario.
+    * @throws IOException En caso de error en la lectura/escritura.
+    * @throws RemoteException En caso de error en la llamada remota. 
+    * @throws NotAuthenticatedException En caso de que el usuario no esté
+    *          autenticado.        
+    * @throws FileExistsException En caso de que el archivo a subir ya
+    *         exista en el servidor de archivos.
+    */
     public static Boolean uploadFile(FileServer server,String src, User owner) throws RemoteException,NotAuthenticatedException{
 		try{
 			copy (new FileInputStream(src), server.getOutputStream(new File(src),owner));
@@ -81,6 +114,20 @@ public class c_rmifs{
 		
 	}
 
+	/**
+        * Método para descargar un archivo del servidor de archivos.
+        *
+        * @param server Servidor de archivos del que se desea descargar 
+        *        el archivo.
+        * @param src Nombre del archivo que se desea descargar del servidor.
+        * @param downloader Usuario que descarga el archivo-
+        * @throws IOException En caso de error en la lectura/escritura.
+        * @throws RemoteException En caso de error en la llamada remota. 
+        * @throws NotAuthenticatedException En caso de que el usuario no esté
+        *          autenticado.
+        * @throws FileNotFoundException En caso de que el archivo especificado
+        *         no exista en el servidor.
+        */
 	public static Boolean downloadFile(FileServer server,String src,User downloader) throws RemoteException,NotAuthenticatedException{
 		try{
 			copy (server.getInputStream(new File(src),downloader), new FileOutputStream(src));
@@ -99,6 +146,24 @@ public class c_rmifs{
 		
 	}
 
+	/**
+        * Método para ejecutar los comandos disponibles para el cliente.
+        *
+        * @param command Comando que se desea ejecutar.
+        * @param arg Argumento del comando que se desea ejecutar.
+        * @param server Servidor de archivos que se utiliza en la ejecución
+        *        de los comandos del cliente.
+        * @throws IOException En caso de error en la lectura/escritura.
+        * @throws RemoteException En caso de error en la llamada remota. 
+        * @throws NotAuthenticatedException En caso de que el usuario no esté
+        *          autenticado.
+        * @throws NotAuthorizedException En caso de que el usuario no esté
+        *          autorizado para realizar la operación. 
+        * @throws FileExistsException En caso de que el archivo a subir ya
+        *         exista en el servidor de archivos.
+        * @throws FileNotFoundException En caso de que el archivo a subir o
+        *         a descargar no exista.
+        */
 	private static void executeCommands(String command, String arg, FileServer server, User myOwner)
 	throws RemoteException,NotAuthenticatedException {
              switch(command){
@@ -137,6 +202,16 @@ public class c_rmifs{
             }
 	}
 
+	/**
+        * Programa principal del cliente.
+        * El cliente analiza las opciones con las que haya sido ejecutado,
+        * y en base a eso inicializa los valores correspondientes al servidor
+        * de archivos, el puerto a utilizar, el archivo con las combinaciones
+        * de usuario/contraseña para la autenticación, y el archivo de
+        * comandos. En caso de que no se especifique un servidor, por defecto
+        * se utiliza localhost, y si no se especifica un puerto, se utiliza
+        * el puerto 30226.
+        */
 	public static void main(String[] args) {
 	  	int port = 30226;
 	  	String host = "localhost";
@@ -181,6 +256,12 @@ public class c_rmifs{
 
             Boolean authenticated = false;
             User myOwner = null;
+            
+            /*
+            * Si se especificó un archivo de combinaciones de usuario/clave
+            * para la autenticación, se van agregando uno a uno a la lista de
+            * usuarios autenticados.
+            */
             if (!authfile.equals("")){
 	            AuthFileParser fileParser = new AuthFileParser(filename);
 		    	LinkedList<User> userList = fileParser.parse();
@@ -198,6 +279,10 @@ public class c_rmifs{
 
 		    Console console = System.console();
 
+		    /*
+		    * Si no se auteticó ningún usuario mediante el archivo,
+		    * se solicitan las credenciales por consola.
+		    */
 		    if (!authenticated){
 		    	User testUser = null;
 		    	while(!authenticated){
@@ -215,7 +300,9 @@ public class c_rmifs{
 		    	myOwner = testUser;
 		    }
 
-		    // Si se especifica un archivo de comandos, se ejecuta aquí
+		    /*
+		    * Si se especificó un archivo de comandos, se ejecutan.
+		    */
 		    Boolean runShell = true;
 		    if (!commandfile.equals("")){
 		    	CommandFileParser commParser = new CommandFileParser(commandfile,myOwner);
@@ -227,6 +314,10 @@ public class c_rmifs{
 
 		    }
 		    
+		    /*
+		    * Si ninguno de los comandos del archivo es 'sal',
+		    * se solicitan comandos por consola.
+		    */
 		    if (runShell){
 		    	String command, fullString, arg;
 			    while(true){
