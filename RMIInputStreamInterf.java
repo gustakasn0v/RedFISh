@@ -32,7 +32,6 @@ public interface RMIInputStreamInterf extends Remote {
    */
     public int read() throws IOException, RemoteException;
     
-    Closes this input stream and releases any system resources associated with the stream.
     
    /**
    * Cierra el stream de entrada actual y libera los recursos del sistema
