@@ -27,7 +27,7 @@ public class s_rmifs {
 		    String filename = "";
 
 		    cliOptions.addOption("help", false, "Print help for this application");
-		    cliOptions.addOption("h", false, "The host of the Authentication server. Defaults to localhost");
+		    cliOptions.addOption("h", true, "The host of the Authentication server. Defaults to localhost");
 		    cliOptions.addOption("r", true, "The port of the Authentication server. Defaults to 20226");
 		    cliOptions.addOption("l", true, "The port to use. Defaults to 30226");
 

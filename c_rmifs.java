@@ -148,7 +148,7 @@ public class c_rmifs{
 		    String filename = "";
 
 		    cliOptions.addOption("help", false, "Print help for this application");
-		    cliOptions.addOption("m", false, "The host of the File server. Defaults to localhost");
+		    cliOptions.addOption("m", true, "The host of the File server. Defaults to localhost");
 		    cliOptions.addOption("p", true, "The port to use. Defaults to 30226");
 		    cliOptions.addOption("f", true, "The authentication file");
 		    cliOptions.addOption("c", true, "The commands file");

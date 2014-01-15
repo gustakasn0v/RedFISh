@@ -74,7 +74,6 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 
                         //Creo la conexion al servidor de autenticacion
                         Registry registry = LocateRegistry.getRegistry(authHost,authPort);
-                        System.out.println(authHost);
                     this.authServer = (AuthDatabase)registry.lookup("Auth");
 
                     this.history = new CircularFifoQueue<FileServerCommand>(this.HIST_SIZE);
