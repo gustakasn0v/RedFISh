@@ -18,15 +18,16 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
  *
  * Septiembre - Diciembre 2013
  *
- * Implementación de las funciones del servidor de archivos
+ * Implementación de las funciones del servidor de archivos.
  *
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */
 public class FileServerImpl extends UnicastRemoteObject implements FileServer{
+	
 	/**
 	* Tabla de hash donde la clave es el nombre del archivo, y el valor
-	* el objeto correspondiente al archivo con ese nombre
+	* el objeto correspondiente al archivo con ese nombre.
 	*/
 	private Hashtable<String,RMIFile> serverFiles;
 
@@ -124,7 +125,8 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
         * 
         * @param user Usuario a autenticar.
         * @throws RemoteException En caso de error en la llamada remota.
-        * @throws NotAuthenticatedException En caso de que las credenciales sean inválidas.
+        * @throws NotAuthenticatedException En caso de que las credenciales del
+        *         usuario sean inválidas.
         */
 	private void authenticate(User user) throws NotAuthenticatedException,RemoteException{
 		try{
@@ -140,13 +142,13 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 	}
 
         /**
-        * Dado un archivo y un usuario que desea descargarlo del servidor de
-        * archivos, se retorna el stream de salida correspondiente a los bytes
+        * Dado un archivo y un usuario que desea descargar del servidor de
+        * archivos, se retorna el stream de entrada correspondiente a los bytes
         * del archivo.
         *
         * @param f Archivo que se desea descargar del servidor.
-        * @param owner Usuario que desea descargar el archivo del servidor.
-        * @return Stream de salida que contiene los bytes del archivo.
+        * @param user Usuario que desea descargar el archivo del servidor.
+        * @return Stream de entrada que contiene los bytes del archivo.
         * @throws IOException En caso de error en la lectura/escritura.
         * @throws RemoteException En caso de error en la llamada remota. 
         * @throws NotAuthenticatedException En caso de que el usuario no esté
@@ -163,11 +165,11 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 
 	/**
         * Dado un archivo y un usuario que lo sube al servidor de archivos,
-        * se retorna el stream de entrada correspondiente a los bytes del archivo.
+        * se retorna el stream de salida correspondiente a los bytes del archivo.
         *
         * @param f Archivo que se desea subir al servidor.
-        * @param user Usuario que desea subir el archivo al servidor.
-        * @return Stream de entrada que contiene los bytes del archivo.
+        * @param owner Usuario que desea subir el archivo al servidor.
+        * @return Stream de salida que contiene los bytes del archivo.
         * @throws IOException En caso de error en la lectura/escritura.
         * @throws RemoteException En caso de error en la llamada remota. 
         * @throws NotAuthenticatedException En caso de que el usuario no esté
@@ -214,12 +216,14 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
         * 
         * @param src Nombre del archivo que se desea eliminar.
         * @param credentials Credenciales del usuario que ejecuta el comando
-        *                    de eliminación de archivo.
+                             de eliminación de archivo.
         * @throws RemoteException En caso de que ocurra algún error en la llamada remota.
         * @throws NotAuthorizedException Si el usuario no está autorizado para eliminar el archivo.
         * @throws FileNotFoundException En caso de que el nombre del archivo no exista.
+        * @throws NotAuthenticatedException Si el usuario no está autenticado.
         */
-	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException,FileNotFoundException{
+	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException,FileNotFoundException, NotAuthenticatedException{
+		authenticate(credentials);
 		if (credentials.equals(this.serverFiles.get(src).owner)){
 			File toDelete = new File(src);
 

@@ -1,6 +1,6 @@
-import java.rmi.*; // For Naming, RemoteException, etc.
-import java.net.*; // For MalformedURLException
-import java.io.*;  // For Serializable interface
+import java.rmi.*;
+import java.net.*;
+import java.io.*;
 import java.rmi.registry.*;
 import java.util.LinkedList;
 
@@ -90,32 +90,5 @@ public class a_rmifs {
     }
     while(true);
 
-//     try {
-//       String host =
-//         (args.length > 0) ? args[0] : "localhost";
-        
-//       String port =
-//         (args.length > 0) ? args[1] : "20226";
-        
-//       Registry registry=LocateRegistry.getRegistry(
-//                host,
-//                (new Integer(port)).intValue()
-//       );
-//       // Get remote object and store it in remObject:
-//       Rem remObject =
-//         (Rem)registry.lookup("Rem");
-//       // Call methods in remObject:
-//       System.out.println(remObject.getMessage());
-//     }
-//     catch(RemoteException re) {
-//       System.out.println("RemoteException: " + re);
-//     }
-//     catch(NotBoundException nbe) {
-//       System.out.println("NotBoundException: " + nbe);
-//     }
-// //    catch(MalformedURLException mfe) {
-// //      System.out.println("MalformedURLException: "
-// //                         + mfe);
-//   //  }
   }
 }

@@ -14,12 +14,12 @@ import java.io.Serializable;
 public class User implements Serializable{
 
         /**
-        * Nombre de usuario
+        * Nombre de usuario.
         */
 	public String username;
 	
 	/**
-        * Contraseña
+        * Contraseña.
         */
 	public String password;
 

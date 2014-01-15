@@ -53,13 +53,13 @@ public class AuthDatabaseImpl extends UnicastRemoteObject implements AuthDatabas
   }
 
   /**
-   * Valida que un usuario pertenezca a los usuarios con acceso al 
-   * servidor de archivos.
-   * 
-   * @param user Usuario cuyas credenciales serán validadas.
-   * @return Lista con los usuarios cuyas credenciales son correctas.
-   * @throws RemoteException En caso de error en la llamada remota. 
-   */
+  * Valida que usuarios pertenezcan a los usuarios con acceso al 
+  * servidor de archivos.
+  * 
+  * @param credentials Usuarios cuyas credenciales serán validadas.
+  * @return Lista con los usuarios cuyas credenciales son correctas.
+  * @throws RemoteException En caso de error en la llamada remota. 
+  */
   public LinkedList<User> authenticate(LinkedList<User> credentials) throws RemoteException{
     LinkedList<User> authenticated = new LinkedList<User>();
     for(User user : credentials){

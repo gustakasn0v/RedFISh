@@ -35,7 +35,7 @@ public class RMIOutputStream extends OutputStream implements
     * al entero que se especifica.
     * 
     * @param b Byte que se va a escribir en el stream de salida
-    * @throws IOException en caso de error en la lectura/escritura.
+    * @throws IOException En caso de error en la lectura/escritura.
     */
     public void write(int b) throws IOException {
         out.write(b);
@@ -60,7 +60,7 @@ public class RMIOutputStream extends OutputStream implements
     * Cierra el stream de bytes de salida y libera los recursos del sistema
     * asociados a él.
     * 
-    * @throws IOException en caso de error en la lectura/escritura.
+    * @throws IOException En caso de error en la lectura/escritura.
     */
     public void close() throws IOException {
         out.close();

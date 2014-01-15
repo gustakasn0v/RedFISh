@@ -26,7 +26,7 @@ public interface FileServer extends Remote{
         *             los archivos del servidor de archivos.
         * @return String con los nombres de los archivos existentes en el servidor.
         * @throws RemoteException En caso de que ocurra algún error en la llamada remota.
-        * @throws NotAuthenticatedException Si el usuario no está autenticado
+        * @throws NotAuthenticatedException Si el usuario no está autenticado.
         */
 	public String listFiles(User user) throws RemoteException,NotAuthenticatedException;
 
@@ -41,13 +41,13 @@ public interface FileServer extends Remote{
 	public Boolean testUser(User user) throws RemoteException;
 
 	/**
-        * Dado un archivo y un usuario que desea descargarlo del servidor de
-        * archivos, se retorna el stream de salida correspondiente a los bytes
+        * Dado un archivo y un usuario que desea descargar del servidor de
+        * archivos, se retorna el stream de entrada correspondiente a los bytes
         * del archivo.
         *
         * @param f Archivo que se desea descargar del servidor.
-        * @param owner Usuario que desea descargar el archivo del servidor.
-        * @return Stream de salida que contiene los bytes del archivo.
+        * @param user Usuario que desea descargar el archivo del servidor.
+        * @return Stream de entrada que contiene los bytes del archivo.
         * @throws IOException En caso de error en la lectura/escritura.
         * @throws RemoteException En caso de error en la llamada remota. 
         * @throws NotAuthenticatedException En caso de que el usuario no esté
@@ -57,15 +57,15 @@ public interface FileServer extends Remote{
 
 	/**
         * Dado un archivo y un usuario que lo sube al servidor de archivos,
-        * se retorna el stream de entrada correspondiente a los bytes del archivo.
+        * se retorna el stream de salida correspondiente a los bytes del archivo.
         *
         * @param f Archivo que se desea subir al servidor.
-        * @param user Usuario que desea subir el archivo al servidor.
-        * @return Stream de entrada que contiene los bytes del archivo.
+        * @param owner Usuario que desea subir el archivo al servidor.
+        * @return Stream de salida que contiene los bytes del archivo.
         * @throws IOException En caso de error en la lectura/escritura.
         * @throws RemoteException En caso de error en la llamada remota. 
         * @throws NotAuthenticatedException En caso de que el usuario no esté
-        *          autenticado.
+        *          autenticado.        
         * @throws FileExistsException En caso de que el archivo a subir ya
         *         exista en el servidor de archivos.
         */
@@ -81,6 +81,7 @@ public interface FileServer extends Remote{
         * @throws RemoteException En caso de que ocurra algún error en la llamada remota.
         * @throws NotAuthorizedException Si el usuario no está autorizado para eliminar el archivo.
         * @throws FileNotFoundException En caso de que el nombre del archivo no exista.
+        * @throws NotAuthenticatedException Si el usuario no está autenticado.
         */
-	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException,FileNotFoundException;	
+        public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException,FileNotFoundException, NotAuthenticatedException;
 }

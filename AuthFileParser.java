@@ -19,44 +19,44 @@ import java.io.IOException;
  */
 public class AuthFileParser implements FileParser{
 
-                /**
-                * Nombre del archivo que se va a analizar.
-                */
-		public String filename;
+        /**
+        * Nombre del archivo que se va a analizar.
+        */
+        public String filename;
 
-		/**
-                * Constructor de la clase.
-                * @param fn Nombre del archivo a analizar
-                */
-		public AuthFileParser(String fn){
-			this.filename = fn;
-		}
+        /**
+        * Constructor de la clase.
+        * @param fn Nombre del archivo a analizar.
+        */
+        public AuthFileParser(String fn){
+                this.filename = fn;
+        }
 
-		/**
-                * Método que realiza el análisis del archivo.
-                * @return Lista con los usuarios existentes en el archivo 
-                * y sus contraseñas.
-                * @throws FileNotFoundException Si el archivo que se intenta analizar
-                *         no existe.
-                */
-		public LinkedList<User> parse() throws FileNotFoundException{
-			LinkedList<User> userList = new LinkedList<User>();
-			BufferedReader fileHandler = new BufferedReader(new FileReader(this.filename));
-			String line;
-			String user,pass;
-			try{
-				while ((line = fileHandler.readLine()) != null){
-					line = line.trim();
-					user = line.substring(0,line.indexOf(':')).trim();
-					pass = line.substring(line.indexOf(':')+1,line.length()).trim();
-					userList.add(new User(user,pass));
-				}
-			}
-			catch(IOException e){
-				e.printStackTrace();
-			}
-			
-			return userList;
-		}
+        /**
+        * Método que realiza el análisis del archivo.
+        * @return Lista con los usuarios existentes en el archivo 
+        *         y sus contraseñas.
+        * @throws FileNotFoundException Si el archivo que se intenta analizar
+        *         no existe.
+        */
+        public LinkedList<User> parse() throws FileNotFoundException{
+            LinkedList<User> userList = new LinkedList<User>();
+            BufferedReader fileHandler = new BufferedReader(new FileReader(this.filename));
+            String line;
+            String user,pass;
+            try{
+                    while ((line = fileHandler.readLine()) != null){
+                            line = line.trim();
+                            user = line.substring(0,line.indexOf(':')).trim();
+                            pass = line.substring(line.indexOf(':')+1,line.length()).trim();
+                            userList.add(new User(user,pass));
+                    }
+            }
+            catch(IOException e){
+                    e.printStackTrace();
+            }
+            
+            return userList;
+        }
 
-	}
+}

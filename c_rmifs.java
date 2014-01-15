@@ -31,7 +31,7 @@ import org.apache.commons.cli.ParseException;
 public class c_rmifs{
 
         /**
-        *Tamaño del buffer
+        *Tamaño del buffer.
         */
 	private static Integer BUF_SIZE = 2048;
 
@@ -67,52 +67,48 @@ public class c_rmifs{
         */
 	private static void copy(InputStream in, OutputStream out) 
             throws IOException {
-        System.out.println("using byte[] read/write");
-        byte[] b = new byte[BUF_SIZE];
-        int len;
-        while ((len = in.read(b)) >= 0) {
-            out.write(b, 0, len);
+            System.out.println("using byte[] read/write");
+            byte[] b = new byte[BUF_SIZE];
+            int len;
+            while ((len = in.read(b)) >= 0) {
+                out.write(b, 0, len);
+            }
+            in.close();
+            out.close();
+        }  
+
+        /**
+        * Método para subir un archivo al servidor de archivos.
+        *
+        * @param server Servidor de archivos al que se desea subir el archivo.
+        * @param src Nombre del archivo que se desea subir al servidor.
+        * @param owner Usuario que sube el archivo y que por tanto será 
+        *        su propietario.
+        * @throws RemoteException En caso de error en la llamada remota. 
+        * @throws NotAuthenticatedException En caso de que el usuario no esté
+        *          autenticado.        
+        */
+        public static Boolean uploadFile(FileServer server,String src, User owner) throws RemoteException,NotAuthenticatedException{
+                try{
+                        copy (new FileInputStream(src), server.getOutputStream(new File(src),owner));
+                }
+                
+                catch(FileNotFoundException e){
+                        System.out.println("El archivo especificado no existe:");
+                        return false;
+                }
+
+                catch(FileExistsException fee){
+                    System.out.println("El archivo ya existe en el servidor");
+                }
+
+                catch(IOException e){
+                        System.out.println("Excepción no esperada de IO");
+                        e.printStackTrace();
+                }
+                return true;
+                
         }
-        in.close();
-        out.close();
-    }
-
-    /**
-    * Método para subir un archivo al servidor de archivos.
-    *
-    * @param server Servidor de archivos al que se desea subir el archivo.
-    * @param src Nombre del archivo que se desea subir al servidor.
-    * @param owner Usuario que sube el archivo y que por tanto será 
-    *        su propietario.
-    * @throws IOException En caso de error en la lectura/escritura.
-    * @throws RemoteException En caso de error en la llamada remota. 
-    * @throws NotAuthenticatedException En caso de que el usuario no esté
-    *          autenticado.        
-    * @throws FileExistsException En caso de que el archivo a subir ya
-    *         exista en el servidor de archivos.
-    */
-    public static Boolean uploadFile(FileServer server,String src, User owner) throws RemoteException,NotAuthenticatedException{
-		try{
-			copy (new FileInputStream(src), server.getOutputStream(new File(src),owner));
-		}
-		
-		catch(FileNotFoundException e){
-			System.out.println("El archivo especificado no existe:");
-			return false;
-		}
-
-		catch(FileExistsException fee){
-            System.out.println("El archivo ya existe en el servidor");
-            
-        }
-
-		catch(IOException e){
-			System.out.println("Excepción no esperada de IO");
-			e.printStackTrace();
-		}
-		return true;
-		
-	}
 
 	/**
         * Método para descargar un archivo del servidor de archivos.
@@ -120,13 +116,10 @@ public class c_rmifs{
         * @param server Servidor de archivos del que se desea descargar 
         *        el archivo.
         * @param src Nombre del archivo que se desea descargar del servidor.
-        * @param downloader Usuario que descarga el archivo-
-        * @throws IOException En caso de error en la lectura/escritura.
+        * @param downloader Usuario que descarga el archivo.
         * @throws RemoteException En caso de error en la llamada remota. 
         * @throws NotAuthenticatedException En caso de que el usuario no esté
         *          autenticado.
-        * @throws FileNotFoundException En caso de que el archivo especificado
-        *         no exista en el servidor.
         */
 	public static Boolean downloadFile(FileServer server,String src,User downloader) throws RemoteException,NotAuthenticatedException{
 		try{
@@ -153,16 +146,10 @@ public class c_rmifs{
         * @param arg Argumento del comando que se desea ejecutar.
         * @param server Servidor de archivos que se utiliza en la ejecución
         *        de los comandos del cliente.
-        * @throws IOException En caso de error en la lectura/escritura.
+        * @param myOwner Usuario que ejecuta el comando.
         * @throws RemoteException En caso de error en la llamada remota. 
         * @throws NotAuthenticatedException En caso de que el usuario no esté
         *          autenticado.
-        * @throws NotAuthorizedException En caso de que el usuario no esté
-        *          autorizado para realizar la operación. 
-        * @throws FileExistsException En caso de que el archivo a subir ya
-        *         exista en el servidor de archivos.
-        * @throws FileNotFoundException En caso de que el archivo a subir o
-        *         a descargar no exista.
         */
 	private static void executeCommands(String command, String arg, FileServer server, User myOwner)
 	throws RemoteException,NotAuthenticatedException {

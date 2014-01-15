@@ -26,7 +26,7 @@ public interface RMIInputStreamInterf extends Remote {
     
    /**
    * Lee el próximo byte disponible en el stream de entrada
-   * @return 
+   * @return Entero entre 0 y 255 correspondiente al próximo byte del stream.
    * @throws IOException En caso de error en la lectura/escritura.
    * @throws RemoteException En caso de error en la llamada remota. 
    */

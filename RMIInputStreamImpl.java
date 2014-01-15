@@ -15,6 +15,7 @@ import java.rmi.RemoteException;
  * @author Gustavo El Khoury    10-10226
  */
 public class RMIInputStreamImpl implements RMIInputStreamInterf {
+    
     /**
     * Stream de entrada.
     */
@@ -36,16 +37,21 @@ public class RMIInputStreamImpl implements RMIInputStreamInterf {
     }
     
     /**
-   * Cierra el stream de entrada actual y libera los recursos del sistema
-   * asociados a él.
-   * @throws IOException En caso de error en la lectura/escritura.
-   * @throws RemoteException En caso de error en la llamada remota. 
-   */
+    * Cierra el stream de entrada actual y libera los recursos del sistema
+    * asociados a él.
+    * @throws IOException En caso de error en la lectura/escritura.
+    * @throws RemoteException En caso de error en la llamada remota. 
+    */
     public void close() throws IOException, RemoteException {
         in.close();
     }
     
-    
+    /**
+    * Lee el próximo byte disponible en el stream de entrada
+    * @return Entero entre 0 y 255 correspondiente al próximo byte del stream.
+    * @throws IOException En caso de error en la lectura/escritura.
+    * @throws RemoteException En caso de error en la llamada remota. 
+    */
     public int read() throws IOException, RemoteException {
         return in.read();
     }

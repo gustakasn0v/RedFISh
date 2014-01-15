@@ -3,24 +3,24 @@
  *
  * Septiembre - Diciembre 2013
  *
- * Implementación de la clase de los comandos del servidor
+ * Implementación de la clase de los comandos del servidor.
  *
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */
 public class FileServerCommand{
         /**
-        * Nombre del comando
+        * Nombre del comando.
         */
 	public String command;
 	
 	/**
-        * Argumento del comando
+        * Argumento del comando.
         */
 	public String argument;
 	
 	/**
-        * Usuario que ejecutó el comando
+        * Usuario que ejecutó el comando.
         */
 	public User executor;
 
@@ -40,6 +40,8 @@ public class FileServerCommand{
         /**
         * Método para expresar en forma de String la información relacionada
         * a un comando.
+        *
+        * @return String con la información del comando.
         */
 	public String toString(){
 		return "Comando: " + this.command +

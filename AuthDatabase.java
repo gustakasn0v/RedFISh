@@ -26,10 +26,10 @@ public interface AuthDatabase extends Remote {
 	public Boolean addUser(User user) throws RemoteException;
 
 	/**
-        * Valida que un usuario pertenezca a los usuarios con acceso al 
+        * Valida que usuarios pertenezcan a los usuarios con acceso al 
         * servidor de archivos.
         * 
-        * @param user Usuario cuyas credenciales serán validadas.
+        * @param credentials Usuarios cuyas credenciales serán validadas.
         * @return Lista con los usuarios cuyas credenciales son correctas.
         * @throws RemoteException En caso de error en la llamada remota. 
         */

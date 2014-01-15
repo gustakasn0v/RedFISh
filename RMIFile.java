@@ -44,6 +44,8 @@ public class RMIFile extends File{
 	/**
         * Método para expresar en forma de String la información relacionada
         * a un archivo.
+        *
+        * @return String con la información asociada a un archivo.
         */
 	public String toString(){
 		System.out.println(this.getName());
