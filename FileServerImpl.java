@@ -69,12 +69,12 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
         */
         public FileServerImpl(String authHost, int authPort) throws RemoteException,NotBoundException{
                 try{
-                        // No tengo idea que agregar a la lista de archivos del servidor
                         this.serverFiles = new Hashtable<String,RMIFile>();
                         this.addCWDFilesToServer();
 
                         //Creo la conexion al servidor de autenticacion
                         Registry registry = LocateRegistry.getRegistry(authHost,authPort);
+                        System.out.println(authHost);
                     this.authServer = (AuthDatabase)registry.lookup("Auth");
 
                     this.history = new CircularFifoQueue<FileServerCommand>(this.HIST_SIZE);
