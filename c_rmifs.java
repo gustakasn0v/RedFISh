@@ -18,12 +18,21 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.ParseException;
 
+/**
+ * c_rmifs.java
+ *
+ * Septiembre - Diciembre 2013
+ *
+ * Programa cliente.
+ *
+ * @author Andrea Balbás        09-10076
+ * @author Gustavo El Khoury    10-10226
+ */
 public class c_rmifs{
 	private static Integer BUF_SIZE = 2048;
 
 
 	private static String listFilesInCWD(){
-		// Directory path here
 		String path = "."; 
 
 		String files = "";
@@ -92,40 +101,40 @@ public class c_rmifs{
 
 	private static void executeCommands(String command, String arg, FileServer server, User myOwner)
 	throws RemoteException,NotAuthenticatedException {
-		switch(command){
-    		case "rls":
-    			System.out.println(server.listFiles(myOwner));
-    			break;
-    		case "lls":
-    			System.out.println(listFilesInCWD());
-    			break;
-    		case "sub":
-    			uploadFile(server,arg,myOwner);
-    			break;
-    		case "baj":
-    			downloadFile(server,arg,myOwner);
-    			break;
-    		case "bor":
-    			try{
-    				server.deleteFile(arg,myOwner);
-    			}
-    			catch(NotAuthorizedException nae){
- 				   System.out.println("No estás autorizado para realizar esa operación");
-				}
-				catch(FileNotFoundException fnfe){
- 				   System.out.println("El archivo especificado no existe");
-				}
-    			break;
-    		case "inf":
-    		//
-    			break;
-    		case "sal":
-    			System.exit(0);
-    			break;
-    		default:
-    			System.out.println("Comando no reconocido");
-    			System.out.print("$>");
-    	}
+             switch(command){
+                    case "rls":
+                            System.out.println(server.listFiles(myOwner));
+                            break;
+                    case "lls":
+                            System.out.println(listFilesInCWD());
+                            break;
+                    case "sub":
+                            uploadFile(server,arg,myOwner);
+                            break;
+                    case "baj":
+                            downloadFile(server,arg,myOwner);
+                            break;
+                    case "bor":
+                            try{
+                                    server.deleteFile(arg,myOwner);
+                            }
+                            catch(NotAuthorizedException nae){
+                                    System.out.println("No estás autorizado para realizar esa operación");
+                                    }
+                                    catch(FileNotFoundException fnfe){
+                                    System.out.println("El archivo especificado no existe");
+                                    }
+                            break;
+                    case "inf":
+                    //
+                            break;
+                    case "sal":
+                            System.exit(0);
+                            break;
+                    default:
+                            System.out.println("Comando no reconocido");
+                            System.out.print("$>");
+            }
 	}
 
 	public static void main(String[] args) {

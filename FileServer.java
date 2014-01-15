@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.File;
 
-
-// Hay que ponerle excepciones a esto!
 /**
  * FileServer.java
  *
