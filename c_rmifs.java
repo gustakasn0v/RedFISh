@@ -171,7 +171,7 @@ public class c_rmifs{
 		    	if ( cl.hasOption('f') ) {
 		    		authfile = cl.getOptionValue("f");
 		    	}
-		    	if ( cl.hasOption('m') ) {
+		    	if ( cl.hasOption('c') ) {
 		    		commandfile = cl.getOptionValue("c");
 		    	}
 		    }
