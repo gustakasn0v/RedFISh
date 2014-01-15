@@ -10,13 +10,28 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.ParseException;
 
-/** Get a Rem object from the specified remote host.
- *  Use its methods as though it were a local object.
- * @see Rem
+/**
+ * sc_rmifs.java
+ *
+ * Septiembre - Diciembre 2013
+ *
+ * Programa del servidor de archivos.
+ *
+ * @author Andrea Balbás        09-10076
+ * @author Gustavo El Khoury    10-10226
  */
-
 public class s_rmifs {
 
+        /**
+        * Programa principal del servidor de archivos.
+        * El servidor analiza las opciones con las que haya sido ejecutado,
+        * y en base a eso inicializa los valores correspondientes al servidor
+        * de autenticación, el puerto de autenticación y el puerto a utilizar.
+        * En caso de que no se especifique un servidor, por defecto
+        * se utiliza localhost, si no se especifica un puerto, se utiliza
+        * el puerto 30226, y si no se especifica un puerto de autenticación,
+        * por defecto se utiliza el puerto 20226.
+        */
 	public static void main(String[] args) {
 	  	int port = 30226;
 	  	int authPort = 20226;
@@ -67,7 +82,9 @@ public class s_rmifs {
 		    }
 		    
 		    
-
+                    /*
+                    * Se inicializa el servidor.
+                    */
 		    Registry registry = LocateRegistry.createRegistry( port );
 		    System.out.print("Iniciando el servidor:\t\t\t");
 		    registry.rebind("FileServer", fileServer);
@@ -75,6 +92,9 @@ public class s_rmifs {
 
 		    BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
 		    String command, fullString;
+		    /*
+		    * Se dispone una consola para ejecución de comandos
+		    */
 		    while(true){
 		    	fullString = bufferRead.readLine();
 		    	switch(fullString){
