@@ -51,7 +51,8 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
 	    for (File fileEntry : folder.listFiles()) {
 	        if (!fileEntry.isDirectory()) {
 	            RMIFile newFile = new RMIFile(
-	            	fileEntry.getName(),new String("pepe")
+	            	fileEntry.getName(),
+	            	null
 	         	);
 				this.serverFiles.put(fileEntry.getName(),newFile);
 	        }
@@ -217,7 +218,9 @@ public class FileServerImpl extends UnicastRemoteObject implements FileServer{
         * @throws FileNotFoundException En caso de que el nombre del archivo no exista.
         */
 	public void deleteFile(String src, User credentials) throws RemoteException,NotAuthorizedException,FileNotFoundException{
-		if (credentials.username.equals(this.serverFiles.get(src).owner)){
+        String owner = this.serverFiles.get(src).owner;
+		if ( owner != null &&
+            credentials.username.equals(owner)){
 			File toDelete = new File(src);
 
 			if (!toDelete.exists()) throw new FileNotFoundException();
