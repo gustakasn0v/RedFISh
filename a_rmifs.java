@@ -15,10 +15,12 @@ import org.apache.commons.cli.ParseException;
  *
  * Septiembre - Diciembre 2013
  *
- * Implementación del servidor de autenticación
+ * Implementación del servidor de autenticación.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
+ * 
  */
 public class a_rmifs {
 

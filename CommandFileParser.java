@@ -13,6 +13,7 @@ import java.io.IOException;
  * el análisis del archivo que contiene los comandos que el cliente ejecuta
  * Implementa la interfaz FileParser.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

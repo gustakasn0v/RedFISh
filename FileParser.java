@@ -12,6 +12,8 @@ import java.io.IOException;
  * Interfaz para hacer el análisis del archivo que contiene los usuarios
  * autorizados para acceder al servidor de archivos y sus contraseñas
  * @author Andrea Balbás        09-10076
+ *
+ * Grupo: 42.
  * @author Gustavo El Khoury    10-10226
  */
 public interface FileParser{

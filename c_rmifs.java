@@ -25,6 +25,7 @@ import org.apache.commons.cli.ParseException;
  *
  * Programa cliente. 
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

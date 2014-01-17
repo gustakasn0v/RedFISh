@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
  * Implementación de las funciones de los streams de bytes de entrada.
  * Implementa a la clase RMIInputStreamInterf.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

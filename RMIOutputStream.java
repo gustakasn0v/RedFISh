@@ -10,6 +10,7 @@ import java.io.OutputStream;
  * Clase de los stream de bytes de entrada para RMI.
  * Extiende a la clase OutputStream e implementa la interfaz Serializable.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

@@ -9,6 +9,7 @@ import java.util.LinkedList;
  * Interfaz de la clase que se utilizará para la autenticación de los usuarios.
  * Extiende a la interfaz Remote.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

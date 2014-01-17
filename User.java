@@ -8,6 +8,7 @@ import java.io.Serializable;
  * Implementación la clase Usuario.
  * Implementa la interfaz Serializable.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

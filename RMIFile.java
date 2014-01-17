@@ -11,6 +11,7 @@ import java.util.LinkedList;
  * de archivos mediante el uso de RMI.
  * Extiende a la clase File.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

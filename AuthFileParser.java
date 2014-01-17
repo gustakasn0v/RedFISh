@@ -14,6 +14,7 @@ import java.io.IOException;
  * al servidor de archivos.
  * Implementa la interfaz FileParser.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

@@ -5,6 +5,7 @@
  *
  * Implementación de la clase de los comandos del servidor.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

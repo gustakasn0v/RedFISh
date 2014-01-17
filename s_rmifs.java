@@ -17,6 +17,7 @@ import org.apache.commons.cli.ParseException;
  *
  * Programa del servidor de archivos.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

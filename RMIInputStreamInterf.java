@@ -9,6 +9,7 @@ import java.io.IOException;
  * Interfaz de las funciones de los streams de bytes de entrada.
  * Extiende a la clase Remote.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */

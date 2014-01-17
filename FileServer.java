@@ -14,6 +14,7 @@ import java.io.File;
  * Interfaz de las funciones del servidor de archivos.
  * Extiende a la interfaz Remote.
  *
+ * Grupo: 42.
  * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */
