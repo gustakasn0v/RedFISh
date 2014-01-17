@@ -18,7 +18,9 @@ sido subidos al servidor por él. De la misma manera, el cliente puede listar
 los archivos presentes en la carpeta donde esté ubicado, y salir del sistema
 en el momento que lo desee. Se provee también de una funcionalidad de ayuda al
 usuario, en donde se describe los comandos disponibles y para qué funciona cada
-uno de ellos.
+uno de ellos. El servidor de archivos cuenta con una funcionalidad que permite
+listar los últimos 20 comandos recibidos de clientes, junto con sus argumentos
+(si aplica) y el nombre del usuario que lo ejecutó.
 
 Sin embargo, no cualquier programa cliente puede gozar de las funciones
 provistas por el servidor, sino que el usuario debe tener unas credenciales
@@ -28,6 +30,7 @@ clientes se autentiquen para utilizar las funciones del servidor de archivos,
 éste se apoya en el uso de un servidor de autenticación, que dado un archivo
 con combinaciones de usuario/contraseña válidos, crea una lista con los
 usuarios cuyo acceso al servidor está permitido.
+
 
 Explicación de los archivos del proyecto
 ========================================
