@@ -46,6 +46,8 @@ public class RMIFile implements Serializable{
         * @return String con la información asociada a un archivo.
         */
 	public String toString(){
-		return "Nombre: "+this.filename + " | " + this.owner + "\n";
+		if (this.owner == null)
+		  return "Nombre: "+this.filename + " | " + "Usuario: Fileserver\n";
+		return "Nombre: "+this.filename + " | " + "Usuario: " + this.owner + "\n";
 	}
 }

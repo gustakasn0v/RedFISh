@@ -97,6 +97,7 @@ public class s_rmifs {
 		    * Se dispone una consola para ejecución de comandos
 		    */
 		    while(true){
+			System.out.print("$>");
 		    	fullString = bufferRead.readLine();
 		    	switch(fullString){
 		    		case "log":
@@ -111,7 +112,6 @@ public class s_rmifs {
 		    			break;
 		    		default:
 		    			System.out.println("Comando no reconocido");
-		    			System.out.print("$>");
 		    	}
 		    }
 		}
