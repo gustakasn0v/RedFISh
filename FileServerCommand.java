@@ -44,7 +44,7 @@ public class FileServerCommand{
         * @return String con la información del comando.
         */
 	public String toString(){
-		return "Comando: " + this.command +
+		return "\nComando: " + this.command +
 		" | Argumento: "+this.argument+" | " + this.executor.toString();
 	}
 }
