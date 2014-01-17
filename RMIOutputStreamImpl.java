@@ -7,7 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
  *
  * Septiembre - Diciembre 2013
  *
- * Interfaz de las funciones de los streams de bytes de salida.
+ * Implementación de las funciones de los streams de bytes de salida.
  * Extiende a la clase Remote.
  *
  * Grupo: 42.

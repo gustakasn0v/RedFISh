@@ -10,10 +10,10 @@ import java.io.IOException;
  * Septiembre - Diciembre 2013
  *
  * Interfaz para hacer el análisis del archivo que contiene los usuarios
- * autorizados para acceder al servidor de archivos y sus contraseñas
- * @author Andrea Balbás        09-10076
+ * autorizados para acceder al servidor de archivos y sus contraseñas.
  *
  * Grupo: 42.
+ * @author Andrea Balbás        09-10076
  * @author Gustavo El Khoury    10-10226
  */
 public interface FileParser{

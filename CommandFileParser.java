@@ -10,7 +10,7 @@ import java.io.IOException;
  * Septiembre - Diciembre 2013
  *
  * Implementación de la interfaz FileParser, que se utilizará para hacer
- * el análisis del archivo que contiene los comandos que el cliente ejecuta
+ * el análisis del archivo que contiene los comandos que el cliente ejecuta.
  * Implementa la interfaz FileParser.
  *
  * Grupo: 42.
