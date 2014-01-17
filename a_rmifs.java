@@ -48,6 +48,7 @@ public class a_rmifs {
 	    if ( cl.hasOption("help") ) {
 	        HelpFormatter helper = new HelpFormatter();
 	        helper.printHelp("s_rmifs -f dbfile -p port", cliOptions);
+		System.exit(0);
 	    }
 	    else {
 	    	if ( !cl.hasOption('f') ) {
