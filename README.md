@@ -54,6 +54,7 @@ NotAuthenticatedException.java          Implementación de excepción utilizada 
                                         esté autenticado.
 NotAuthorizedException.java             Implementación de excepción utilizada en caso de que un usuario 
                                         no esté autorizado para ejecutar una acción en el servidor de archivos.
+org                                     Directorio con las librerías de apache que se usaron en el proyecto.
 RMIFile.java                            Clase correspondiente a los archivos que serán enviados al servidor
                                         de archivos mediante el uso de RMI.
 RMIInputStreamImpl.java                 Implementación de las funciones de los streams de bytes de entrada.
