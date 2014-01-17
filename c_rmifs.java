@@ -178,7 +178,24 @@ public class c_rmifs{
                                     }
                             break;
                     case "inf":
-                    //
+							System.out.println("rls: muestra la lista de archivos disponibles en servidor centralizado. \n\n"
+							+"lls: muestra la lista de archivos disponibles localmente (en el cliente). \n\n"
+
+							+"sub archivo: sube un archivo al servidor remoto (Ej: sub clase.pdf).\n"
+							+"El archivo especificado como parámetro debe estar en la lista de archivos\n"
+							+"disponibles para el cliente localmente.\n\n"
+
+							+"baj archivo:baja un archivo desde el servidor remoto (Ej: baj ejemplo.c). El\n"
+							+"archivo especificado debe estar en la lista de archivos disponibles en el\n"
+							+"servidor centralizado para que el comando funcione adecuadamente.\n\n"
+
+							+"bor archivo: borra el archivo en el servidor remoto.\n\n"
+							
+							+"info: muestra la lista de comandos que el cliente puede usar con una breve\n"
+							+"descripción de cada uno de ellos.\n\n"
+
+							+"sal: termina la ejecución del programa cliente, notificando este hecho a \n"
+							+"todos los procesos del sistema que lo requieran.\n\n");
                             break;
                     case "sal":
                             System.exit(0);
