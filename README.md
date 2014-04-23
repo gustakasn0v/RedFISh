@@ -109,7 +109,7 @@ La carpeta org/apache/commons/cli: Librerias de reconocmiento de opciones por co
 
 Compilacion
 ===========
-     Se provee de un archivo Makefile capaz de realizar todas las labores de compilación. Debe descomprimirse el archivo y ejecutar make para compilar el proyecto. 
+Se provee de un archivo Makefile capaz de realizar todas las labores de compilación. Debe descomprimirse el archivo y ejecutar make para compilar el proyecto. 
      
 
     Copyright (C) 2014  Gustavo El Khoury <gustavoelkhoury@gmail.com>
